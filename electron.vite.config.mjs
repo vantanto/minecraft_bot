@@ -1,5 +1,6 @@
 import { resolve } from 'path'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
+import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
@@ -12,9 +13,18 @@ export default defineConfig({
   renderer: {
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src')
+        '@': resolve('src'),
+        '@renderer': resolve('src/renderer/src'),
+        '@components': resolve('src/renderer/src/components')
       }
     },
-    plugins: [vue()]
+    plugins: [
+      vue({
+        template: { transformAssetUrls }
+      }),
+      quasar({
+        sassVariables: 'src/renderer/src/assets/sass/quasar-variables.sass'
+      })
+    ]
   }
 })

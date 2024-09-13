@@ -10,6 +10,7 @@ function createWindow() {
     height: 670,
     show: false,
     autoHideMenuBar: true,
+    title: 'Minecraft BOT',
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -51,6 +52,7 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+  ipcMain.handle('app-get-version', () => app.getVersion())
 
   createWindow()
 
