@@ -1,6 +1,8 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import handleIpcMain from './ipc/index'
+import config from '../config'
 import icon from '../../resources/icon.png?asset'
 
 function createWindow() {
@@ -10,6 +12,7 @@ function createWindow() {
     height: 670,
     show: false,
     autoHideMenuBar: true,
+    title: config.APP_NAME,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -49,8 +52,7 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
+  handleIpcMain()
 
   createWindow()
 
