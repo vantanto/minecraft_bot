@@ -1,5 +1,5 @@
 const config = {
-  APP_NAME: 'Minecraft BOT',
+  APP_NAME: 'Minecraft Bot',
   BOT_STATUS: {
     CONNECTED: 'Connected',
     DISCONNECTED: 'Disconnected',
