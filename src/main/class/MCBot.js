@@ -78,7 +78,7 @@ class MCBot {
 
   setStatus(status) {
     this.status = status
-    this.webContents.send('bot:status-bot-updated', this.status)
+    this.webContents.send('bot:status-bot-updated', this.username, this.status)
   }
 }
 

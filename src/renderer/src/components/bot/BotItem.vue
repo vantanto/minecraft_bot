@@ -33,8 +33,10 @@ const disconnectBot = async () => {
   if (response.status === config.RESPONSE_STATUS.ERROR) $q.notify(response.message)
 }
 
-api.bot.onStatusBotUpdated((status) => {
-  botData.value.status = status
+api.bot.onStatusBotUpdated((username, status) => {
+  if (botData.value.username == username) {
+    botData.value.status = status
+  }
 })
 
 watchEffect(() => {
