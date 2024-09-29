@@ -12,7 +12,7 @@ api.bot = {
   connectBot: async (index) => await ipcRenderer.invoke('bot:connect-bot', index),
   disconnectBot: async (index) => await ipcRenderer.invoke('bot:disconnect-bot', index),
   onStatusBotUpdated: (callback) =>
-    ipcRenderer.on('bot:status-bot-updated', (_event, status) => callback(status))
+    ipcRenderer.on('bot:status-bot-updated', (_event, username, status) => callback(username, status))
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
