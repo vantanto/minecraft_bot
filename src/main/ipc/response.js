@@ -1,11 +1,11 @@
-import config from '../../config'
+import config from '@/config'
 
 const response = {
   success: (message, data = null) => {
-    return { status: config.RESPONSE_STATUS.SUCCESS, message, data }
+    return { status: config.RESPONSE_STATUS.SUCCESS, message: message.toString(), data }
   },
   error: (message, data = null) => {
-    return { status: config.RESPONSE_STATUS.ERROR, message, data }
+    return { status: config.RESPONSE_STATUS.ERROR, message: message.toString(), data }
   }
 }
 

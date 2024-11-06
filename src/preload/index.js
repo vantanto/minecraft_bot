@@ -6,13 +6,19 @@ const api = {}
 
 api.getVersion = () => ipcRenderer.invoke('app:get-version')
 api.bot = {
+  getBot: (index) => ipcRenderer.invoke('bot:get-bot', index),
   getBots: () => ipcRenderer.invoke('bot:get-bots'),
   createBot: (username) => ipcRenderer.invoke('bot:create-bot', username),
-  getBot: (index) => ipcRenderer.invoke('bot:get-bot', index),
   connectBot: async (index) => await ipcRenderer.invoke('bot:connect-bot', index),
   disconnectBot: async (index) => await ipcRenderer.invoke('bot:disconnect-bot', index),
   onStatusBotUpdated: (callback) =>
-    ipcRenderer.on('bot:status-bot-updated', (_event, username, status) => callback(username, status))
+    ipcRenderer.on('bot:status-bot-updated', (_event, username, status) =>
+      callback(username, status)
+    )
+}
+api.storage = {
+  getServer: () => ipcRenderer.invoke('storage:get-server'),
+  setServer: (data) => ipcRenderer.invoke('storage:set-server', data)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

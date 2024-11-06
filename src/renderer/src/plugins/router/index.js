@@ -9,7 +9,12 @@ const routes = [
       {
         path: '/',
         name: 'index',
-        component: () => import('@renderer/views/IndexView.vue')
+        component: () => import('@renderer/views/ServerSelectorView.vue')
+      },
+      {
+        path: '/usernames',
+        name: 'usernames',
+        component: () => import('@renderer/views/UsernameListView.vue')
       }
     ]
   }

@@ -1,5 +1,6 @@
 import mineflayer from 'mineflayer'
-import config from '../../config'
+import config from '@/config'
+import global from '@/main/global'
 
 let botArgs = {
   host: 'localhost',
@@ -11,9 +12,9 @@ class MCBot {
   constructor(webContents, username) {
     this.webContents = webContents
     this.username = username
-    this.host = botArgs['host']
-    this.port = botArgs['port']
-    this.version = botArgs['version']
+    this.host = global.SERVER.host
+    this.port = global.SERVER.port
+    this.version = global.SERVER.version
     this.status = config.BOT_STATUS.DISCONNECTED
     this.bot = null
   }

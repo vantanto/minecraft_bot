@@ -1,41 +1,42 @@
 import { ipcMain } from 'electron'
 import mineflayer from 'mineflayer'
 import response from './response'
-import MCBot from '../class/MCBot'
-
-let bots = []
+import { getServerBotUsernames, saveServerBotUsernames } from './storage'
+import MCBot from '@/main/class/MCBot'
+import global from '@/main/global'
 
 const getMcBot = (index) => {
-  const mcbot = bots[index]
+  const mcbot = global.BOTS[index]
   if (!(mcbot instanceof MCBot))
     throw new TypeError('Inconsistent types: bot and MCBot must be of the same type.')
 
   return mcbot
 }
 
+const handleGetBot = (_event, index) => {
+  const mcbot = getMcBot(index)
+  return response.success('Success', mcbot.getData())
+}
+
 const handleGetBots = (_event) => {
-  const mcbotData = bots.map((mcbot) => mcbot.getData())
+  const mcbotData = global.BOTS.map((mcbot) => mcbot.getData())
   return response.success('Success', mcbotData)
 }
 
 const handleCreateBot = async (_event, username) => {
   try {
-    if (bots.findIndex((item) => item.username === username) !== -1)
+    if (global.BOTS.findIndex((item) => item.username === username) !== -1)
       throw new Error('Username already exists')
 
     const webContents = _event.sender
     const mcbot = new MCBot(webContents, username)
     await mcbot.initBot()
-    bots.push(mcbot)
+    global.BOTS.push(mcbot)
+    await saveServerBotUsernames()
     return response.success('Bot Created')
   } catch (err) {
     return response.error(err)
   }
-}
-
-const handleGetBot = (_event, index) => {
-  const mcbot = getMcBot(index)
-  return response.success('Success', mcbot.getData())
 }
 
 const handleConnectBot = async (_event, index) => {

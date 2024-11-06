@@ -21,6 +21,7 @@
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
     "@quasar/extras": "^1.16.12",
+    "electron-json-storage": "^4.6.0",
     "mineflayer": "^4.20.1",
     "quasar": "^2.16.11",
     "vue-router": "^4.4.4"
