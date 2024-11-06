@@ -6,13 +6,14 @@ import BotStatus from '@renderer/components/bot/BotStatus.vue'
 
 const $q = useQuasar()
 
+const emit = defineEmits(['update:save'])
 const props = defineProps({
   data: Object,
   index: Number
 })
 
 const botData = ref({})
-const loadingConnect = ref(false)
+const loading = ref({})
 
 const getBot = async () => {
   const response = await api.bot.getBot(props.index)
@@ -20,17 +21,24 @@ const getBot = async () => {
 }
 
 const connectBot = async () => {
-  loadingConnect.value = true
+  loading.value.connect = true
   const response = await api.bot.connectBot(props.index)
-  loadingConnect.value = false
+  loading.value.connect = false
   if (response.status === config.RESPONSE_STATUS.ERROR) $q.notify(response.message)
 }
 
 const disconnectBot = async () => {
-  loadingConnect.value = true
+  loading.value.connect = true
   await api.bot.disconnectBot(props.index)
-  loadingConnect.value = false
-  if (response.status === config.RESPONSE_STATUS.ERROR) $q.notify(response.message)
+  loading.value.connect = false
+}
+
+const deleteBot = async () => {
+  loading.value.delete = true
+  const response = await api.bot.deleteBot(props.index)
+  loading.value.delete = false
+  emit('update:save')
+  $q.notify(response.message)
 }
 
 api.bot.onStatusBotUpdated((username, status) => {
@@ -61,20 +69,20 @@ watchEffect(() => {
           v-if="botData.status !== config.BOT_STATUS.CONNECTED"
           flat
           icon="play_circle"
-          :loading="loadingConnect"
+          :loading="loading.connect"
           @click="connectBot"
         >
           <q-tooltip> Connect </q-tooltip>
         </q-btn>
-        <q-btn v-else flat icon="stop_circle" :loading="loadingConnect" @click="disconnectBot">
+        <q-btn v-else flat icon="stop_circle" :loading="loading.connect" @click="disconnectBot">
           <q-tooltip> Disconnect </q-tooltip>
         </q-btn>
         <!-- <q-btn flat icon="message" @click="openChatPopup">
           <q-tooltip> Chat </q-tooltip>
-        </q-btn>
-        <q-btn flat icon="delete" color="negative" @click="deleteBot">
-          <q-tooltip> Delete </q-tooltip>
         </q-btn> -->
+        <q-btn flat icon="delete" color="negative" :loading="loading.delete" @click="deleteBot">
+          <q-tooltip> Delete </q-tooltip>
+        </q-btn>
       </div>
     </q-item-section>
   </q-item>

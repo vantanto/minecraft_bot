@@ -59,12 +59,25 @@ const handleDisconnectBot = async (_event, index) => {
   }
 }
 
+const handleDeleteBot = async (_event, index) => {
+  try {
+    const mcbot = getMcBot(index)
+    await mcbot.disconnectBot()
+    global.BOTS.splice(index, 1)
+    await saveServerBotUsernames()
+    return response.success('Deleted')
+  } catch (err) {
+    return response.error(err)
+  }
+}
+
 const handleIpcBot = () => {
   ipcMain.handle('bot:get-bot', handleGetBot)
   ipcMain.handle('bot:get-bots', handleGetBots)
   ipcMain.handle('bot:create-bot', handleCreateBot)
   ipcMain.handle('bot:connect-bot', handleConnectBot)
   ipcMain.handle('bot:disconnect-bot', handleDisconnectBot)
+  ipcMain.handle('bot:delete-bot', handleDeleteBot)
 }
 
 export default handleIpcBot

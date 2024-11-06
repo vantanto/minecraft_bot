@@ -11,6 +11,7 @@ api.bot = {
   createBot: (username) => ipcRenderer.invoke('bot:create-bot', username),
   connectBot: async (index) => await ipcRenderer.invoke('bot:connect-bot', index),
   disconnectBot: async (index) => await ipcRenderer.invoke('bot:disconnect-bot', index),
+  deleteBot: async (index) => await ipcRenderer.invoke('bot:delete-bot', index),
   onStatusBotUpdated: (callback) =>
     ipcRenderer.on('bot:status-bot-updated', (_event, username, status) =>
       callback(username, status)

@@ -66,7 +66,7 @@ class MCBot {
   }
 
   async disconnectBot() {
-    await this.bot.quit()
+    if (this.bot) await this.bot.quit()
     this.setStatus(config.BOT_STATUS.DISCONNECTED)
   }
 
