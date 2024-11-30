@@ -14,7 +14,6 @@ const loading = ref(false)
 const handleSubmitForm = async () => {
   loading.value = true
   const response = await api.bot.createBot(form.value.username)
-  console.log(response.status, config.RESPONSE_STATUS.SUCCESS)
   loading.value = false
   if (response.status === config.RESPONSE_STATUS.SUCCESS) {
     emit('update:save')

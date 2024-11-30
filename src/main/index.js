@@ -2,7 +2,7 @@ import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import handleIpcMain from './ipc/index'
-import config from '../config'
+import config from '@/config'
 import icon from '../../resources/icon.png?asset'
 
 function createWindow() {

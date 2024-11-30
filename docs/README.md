@@ -6,21 +6,28 @@ A Minecraft bot that connects to a server with an intuitive graphical user inter
 
 - Create a new bot
 - Connect and disconnect the bot
+- Store server and bot usernames
 
 ### Planned Features
 
-- Set Minecraft server address
-- Store server and bot usernames
 - Chat functionality
 
 ## Screenshots
 
 <details>
-<summary>Main Application Screen</summary>
+<summary>Server Selector Screen</summary>
 
-![Main Screen](./images/main-screenshot.png)
+![Server Selector Screen](./images/server-selector.png)
 
-*The main screen of the Minecraft Bot application.*
+*The selector screen of the Minecraft Bot application.*
+</details>
+
+<details>
+<summary>Username list Screen</summary>
+
+![Username List Screen](./images/username-list.png)
+
+*The username list screen of the Minecraft Bot application.*
 </details>
 
 <details>
