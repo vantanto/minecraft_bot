@@ -19,6 +19,7 @@ api.bot = {
 }
 api.storage = {
   getServer: () => ipcRenderer.invoke('storage:get-server'),
+  getServers: () => ipcRenderer.invoke('storage:get-servers'),
   setServer: (data) => ipcRenderer.invoke('storage:set-server', data)
 }
 

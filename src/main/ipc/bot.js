@@ -1,7 +1,7 @@
 import { ipcMain } from 'electron'
 import mineflayer from 'mineflayer'
 import response from './response'
-import { getServerBotUsernames, saveServerBotUsernames } from './storage'
+import { updateServerUsernames } from './storage'
 import MCBot from '@/main/class/MCBot'
 import global from '@/main/global'
 
@@ -32,7 +32,7 @@ const handleCreateBot = async (_event, username) => {
     const mcbot = new MCBot(webContents, username)
     await mcbot.initBot()
     global.BOTS.push(mcbot)
-    await saveServerBotUsernames()
+    await updateServerUsernames()
     return response.success('Bot Created')
   } catch (err) {
     return response.error(err)
@@ -52,7 +52,7 @@ const handleConnectBot = async (_event, index) => {
 const handleDisconnectBot = async (_event, index) => {
   try {
     const mcbot = getMcBot(index)
-    await mcbot.disconnectBot()
+    await mcbot.disconnect()
     return response.success('Disconnected')
   } catch (err) {
     return response.error(err)
@@ -62,9 +62,9 @@ const handleDisconnectBot = async (_event, index) => {
 const handleDeleteBot = async (_event, index) => {
   try {
     const mcbot = getMcBot(index)
-    await mcbot.disconnectBot()
+    await mcbot.disconnect()
     global.BOTS.splice(index, 1)
-    await saveServerBotUsernames()
+    await updateServerUsernames()
     return response.success('Deleted')
   } catch (err) {
     return response.error(err)

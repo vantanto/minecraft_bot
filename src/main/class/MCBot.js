@@ -38,7 +38,7 @@ class MCBot {
         console.log(
           `[${this.username}] Logged in to ${botSocket.server ? botSocket.server : botSocket._host}`
         )
-        resolve('login')
+        // resolve('login')
       })
 
       this.bot.once('spawn', async () => {
@@ -65,7 +65,7 @@ class MCBot {
     })
   }
 
-  async disconnectBot() {
+  async disconnect() {
     if (this.bot) await this.bot.quit()
     this.setStatus(config.BOT_STATUS.DISCONNECTED)
   }

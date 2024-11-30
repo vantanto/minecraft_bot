@@ -4,7 +4,8 @@ import { onMounted, ref } from 'vue'
 const server = ref({})
 
 const getServer = async () => {
-  server.value = await api.storage.getServer()
+  const response = await api.storage.getServer()
+  server.value = response.data
 }
 
 onMounted(() => {

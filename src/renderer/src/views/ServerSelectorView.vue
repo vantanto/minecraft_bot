@@ -4,6 +4,29 @@ import router from '@renderer/plugins/router'
 
 const form = ref({})
 const loading = ref(false)
+const servers = ref([])
+const hosts = ref([])
+
+const filterFn = (val, update, abort) => {
+  update(() => {
+    const needle = val.toLowerCase()
+    hosts.value = Object.keys(servers.value).filter((v) => v.toLowerCase().indexOf(needle) > -1)
+  })
+}
+
+const onChangeHost = (val) => {
+  form.value.host = val
+  const server = servers.value[val]
+  if (server) {
+    form.value.port = server.port
+    form.value.version = server.version
+  }
+}
+
+const getServers = async () => {
+  const response = await api.storage.getServers()
+  servers.value = response.data
+}
 
 const handleSubmitForm = async () => {
   loading.value = true
@@ -23,6 +46,7 @@ const resetForm = () => {
 }
 
 onMounted(() => {
+  getServers()
   resetForm()
 })
 </script>
@@ -33,12 +57,25 @@ onMounted(() => {
       <q-card square bordered class="q-pa-lg shadow-1">
         <q-form @submit="handleSubmitForm">
           <q-card-section class="q-pt-none">
-            <q-input
+            <q-select
               dense
-              v-model="form.host"
+              use-input
+              hide-selected
+              fill-input
+              input-debounce="0"
               label="Host"
+              :model-value="form.host"
+              :options="hosts"
               :rules="[(val) => (val && val.length > 0) || 'Please type something']"
-            />
+              @input-value="onChangeHost"
+              @filter="filterFn"
+            >
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey"> No results </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
             <q-input
               dense
               v-model="form.port"
