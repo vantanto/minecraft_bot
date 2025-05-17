@@ -3,7 +3,10 @@
   "version": "1.1.0",
   "description": "Connecting Minecraft bot to a server, featuring an intuitive graphical user interface (GUI).",
   "main": "./out/main/index.js",
-  "author": "vantanto.github.io",
+  "author": {
+    "name": "vantanto.github.io",
+    "email": "kristanto.margojoyo99@gmail.com"
+  },
   "homepage": "https://github.com/vantanto",
   "scripts": {
     "format": "prettier --write .",
@@ -49,6 +52,10 @@
       "target": [
         "portable"
       ]
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "category": "Utility"
     }
   }
 }
