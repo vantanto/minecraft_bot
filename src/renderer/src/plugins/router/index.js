@@ -17,6 +17,17 @@ const routes = [
         component: () => import('@renderer/views/UsernameListView.vue')
       }
     ]
+  },
+  {
+    component: () => import('@renderer/views/layouts/AppMainNoFooter.vue'),
+    children: [
+      {
+        path: '/chat/:index/:username',
+        name: 'chat',
+        props: true,
+        component: () => import('@renderer/views/ChatBotView.vue')
+      }
+    ]
   }
 ]
 

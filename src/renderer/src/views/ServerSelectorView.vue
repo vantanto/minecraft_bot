@@ -39,10 +39,7 @@ const handleSubmitForm = async () => {
 }
 
 const resetForm = () => {
-  form.value = {
-    port: 25565,
-    version: '1.20.1'
-  }
+  form.value = { port: 25565, version: '1.20.1' }
 }
 
 onMounted(() => {

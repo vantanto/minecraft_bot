@@ -71,6 +71,16 @@ const handleDeleteBot = async (_event, index) => {
   }
 }
 
+const onOpenChatBot = (_event, index) => {
+  const mcbot = getMcBot(index)
+  mcbot.openChatWindow(index)
+}
+
+const sendChatBot = (_event, index, message) => {
+  const mcbot = getMcBot(index)
+  mcbot.sendChat(message)
+}
+
 const handleIpcBot = () => {
   ipcMain.handle('bot:get-bot', handleGetBot)
   ipcMain.handle('bot:get-bots', handleGetBots)
@@ -78,6 +88,8 @@ const handleIpcBot = () => {
   ipcMain.handle('bot:connect-bot', handleConnectBot)
   ipcMain.handle('bot:disconnect-bot', handleDisconnectBot)
   ipcMain.handle('bot:delete-bot', handleDeleteBot)
+  ipcMain.on('bot:open-chat-bot', onOpenChatBot)
+  ipcMain.on('bot:send-chat-bot', sendChatBot)
 }
 
 export default handleIpcBot

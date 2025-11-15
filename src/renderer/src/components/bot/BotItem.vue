@@ -33,6 +33,10 @@ const disconnectBot = async () => {
   loading.value.connect = false
 }
 
+const openChatBot = () => {
+  api.bot.openChatBot(props.index)
+}
+
 const deleteBot = async () => {
   loading.value.delete = true
   const response = await api.bot.deleteBot(props.index)
@@ -92,9 +96,16 @@ watchEffect(() => {
         </q-btn>
 
         <!-- CHAT -->
-        <!-- <q-btn dense flat color="primary" icon="chat_bubble" @click="openChatPopup">
+        <q-btn
+          dense
+          flat
+          :color="botData.status == config.BOT_STATUS.CONNECTED ? 'primary' : ''"
+          icon="chat_bubble"
+          :disable="botData.status !== config.BOT_STATUS.CONNECTED"
+          @click="openChatBot"
+        >
           <q-tooltip>Chat</q-tooltip>
-        </q-btn> -->
+        </q-btn>
 
         <!-- DELETE -->
         <q-btn

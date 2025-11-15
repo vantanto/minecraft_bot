@@ -15,7 +15,9 @@ api.bot = {
   onStatusBotUpdated: (callback) =>
     ipcRenderer.on('bot:status-bot-updated', (_event, username, status) =>
       callback(username, status)
-    )
+    ),
+  openChatBot: (index) => ipcRenderer.send('bot:open-chat-bot', index),
+  sendChatBot: (index, message) => ipcRenderer.send('bot:send-chat-bot', index, message)
 }
 api.storage = {
   getServer: () => ipcRenderer.invoke('storage:get-server'),

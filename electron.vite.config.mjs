@@ -4,17 +4,8 @@ import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
-  main: {
-    resolve: {
-      alias: {
-        '@': resolve('src')
-      }
-    },
-    plugins: [externalizeDepsPlugin()]
-  },
-  preload: {
-    plugins: [externalizeDepsPlugin()]
-  },
+  main: { resolve: { alias: { '@': resolve('src') } }, plugins: [externalizeDepsPlugin()] },
+  preload: { plugins: [externalizeDepsPlugin()] },
   renderer: {
     resolve: {
       alias: {
@@ -24,12 +15,8 @@ export default defineConfig({
       }
     },
     plugins: [
-      vue({
-        template: { transformAssetUrls }
-      }),
-      quasar({
-        sassVariables: 'src/renderer/src/assets/sass/quasar-variables.sass'
-      })
+      vue({ template: { transformAssetUrls } }),
+      quasar({ sassVariables: resolve('src/renderer/src/assets/sass/quasar-variables.sass') })
     ]
   }
 })
