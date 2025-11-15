@@ -65,23 +65,47 @@ watchEffect(() => {
     </q-item-section>
     <q-item-section top side>
       <div class="q-gutter-xs">
+        <!-- CONNECT -->
         <q-btn
           v-if="botData.status !== config.BOT_STATUS.CONNECTED"
+          dense
           flat
-          icon="play_circle"
+          color="positive"
+          icon="play_arrow"
           :loading="loading.connect"
           @click="connectBot"
         >
-          <q-tooltip> Connect </q-tooltip>
+          <q-tooltip>Connect</q-tooltip>
         </q-btn>
-        <q-btn v-else flat icon="stop_circle" :loading="loading.connect" @click="disconnectBot">
-          <q-tooltip> Disconnect </q-tooltip>
+
+        <!-- DISCONNECT -->
+        <q-btn
+          v-else
+          dense
+          flat
+          color="negative"
+          icon="stop"
+          :loading="loading.connect"
+          @click="disconnectBot"
+        >
+          <q-tooltip>Disconnect</q-tooltip>
         </q-btn>
-        <!-- <q-btn flat icon="message" @click="openChatPopup">
-          <q-tooltip> Chat </q-tooltip>
+
+        <!-- CHAT -->
+        <!-- <q-btn dense flat color="primary" icon="chat_bubble" @click="openChatPopup">
+          <q-tooltip>Chat</q-tooltip>
         </q-btn> -->
-        <q-btn flat icon="delete" color="negative" :loading="loading.delete" @click="deleteBot">
-          <q-tooltip> Delete </q-tooltip>
+
+        <!-- DELETE -->
+        <q-btn
+          dense
+          flat
+          color="negative"
+          icon="delete"
+          :loading="loading.delete"
+          @click="deleteBot"
+        >
+          <q-tooltip>Delete</q-tooltip>
         </q-btn>
       </div>
     </q-item-section>
