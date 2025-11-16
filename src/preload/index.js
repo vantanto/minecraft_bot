@@ -12,12 +12,13 @@ api.bot = {
   connectBot: async (index) => await ipcRenderer.invoke('bot:connect-bot', index),
   disconnectBot: async (index) => await ipcRenderer.invoke('bot:disconnect-bot', index),
   deleteBot: async (index) => await ipcRenderer.invoke('bot:delete-bot', index),
+  openChatBot: (index) => ipcRenderer.send('bot:open-chat-bot', index),
+  sendChatBot: (index, message) => ipcRenderer.send('bot:send-chat-bot', index, message),
+
   onStatusBotUpdated: (callback) =>
     ipcRenderer.on('bot:status-bot-updated', (_event, username, status) =>
       callback(username, status)
-    ),
-  openChatBot: (index) => ipcRenderer.send('bot:open-chat-bot', index),
-  sendChatBot: (index, message) => ipcRenderer.send('bot:send-chat-bot', index, message)
+    )
 }
 api.storage = {
   getServer: () => ipcRenderer.invoke('storage:get-server'),

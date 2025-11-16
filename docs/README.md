@@ -19,7 +19,8 @@ A Minecraft bot that connects to a server with an intuitive graphical user inter
 
 ![Server Selector Screen](./images/server-selector.png)
 
-*The selector screen of the Minecraft Bot application.*
+_The selector screen of the Minecraft Bot application._
+
 </details>
 
 <details>
@@ -27,7 +28,8 @@ A Minecraft bot that connects to a server with an intuitive graphical user inter
 
 ![Username List Screen](./images/username-list.png)
 
-*The username list screen of the Minecraft Bot application.*
+_The username list screen of the Minecraft Bot application._
+
 </details>
 
 <details>
@@ -35,7 +37,8 @@ A Minecraft bot that connects to a server with an intuitive graphical user inter
 
 ![Username Popup](./images/username-popup.png)
 
-*Popup window to enter the bot username.*
+_Popup window to enter the bot username._
+
 </details>
 
 ## Credits

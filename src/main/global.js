@@ -1,6 +1,6 @@
 let global = {
   SERVER: {},
-  BOTS: [],
+  BOTS: []
 }
 
 export default global

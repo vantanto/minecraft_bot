@@ -4,6 +4,7 @@ import response from './response'
 import { updateServerUsernames } from './storage'
 import MCBot from '@/main/class/MCBot'
 import global from '@/main/global'
+import { getMainWindow } from '../mainWindow'
 
 const getMcBot = (index) => {
   const mcbot = global.BOTS[index]
@@ -28,8 +29,7 @@ const handleCreateBot = async (_event, username) => {
     if (global.BOTS.findIndex((item) => item.username === username) !== -1)
       throw new Error('Username already exists')
 
-    const webContents = _event.sender
-    const mcbot = new MCBot(webContents, username)
+    const mcbot = new MCBot(username)
     await mcbot.initBot()
     global.BOTS.push(mcbot)
     await updateServerUsernames()
@@ -76,7 +76,7 @@ const onOpenChatBot = (_event, index) => {
   mcbot.openChatWindow(index)
 }
 
-const sendChatBot = (_event, index, message) => {
+const onSendChatBot = (_event, index, message) => {
   const mcbot = getMcBot(index)
   mcbot.sendChat(message)
 }
@@ -89,7 +89,12 @@ const handleIpcBot = () => {
   ipcMain.handle('bot:disconnect-bot', handleDisconnectBot)
   ipcMain.handle('bot:delete-bot', handleDeleteBot)
   ipcMain.on('bot:open-chat-bot', onOpenChatBot)
-  ipcMain.on('bot:send-chat-bot', sendChatBot)
+  ipcMain.on('bot:send-chat-bot', onSendChatBot)
+}
+
+export const sendStatusBotUpdated = (username, status) => {
+  const mainWindow = getMainWindow()
+  mainWindow.webContents.send('bot:status-bot-updated', username, status)
 }
 
 export default handleIpcBot

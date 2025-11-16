@@ -4,12 +4,12 @@ import global from '@/main/global'
 import { BrowserWindow } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
+import { sendStatusBotUpdated } from '../ipc/bot'
 
 let botArgs = { host: 'localhost', port: 25565, version: '1.20.1' }
 
 class MCBot {
-  constructor(webContents, username) {
-    this.webContents = webContents
+  constructor(username) {
     this.username = username
     this.host = global.SERVER.host
     this.port = global.SERVER.port
@@ -76,7 +76,7 @@ class MCBot {
 
   setStatus(status) {
     this.status = status
-    this.webContents.send('bot:status-bot-updated', this.username, this.status)
+    sendStatusBotUpdated(this.username, this.status)
   }
 
   openChatWindow(index) {

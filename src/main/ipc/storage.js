@@ -43,7 +43,6 @@ const handleGetServers = async (_event) => {
 }
 
 const handleSetServer = async (_event, data) => {
-  const webContents = _event.sender
   const servers = getServers()
   const usernames = servers[data.host]?.usernames || []
   servers[data.host] = { ...data, usernames }
@@ -52,7 +51,7 @@ const handleSetServer = async (_event, data) => {
 
   global.SERVER = data
   global.BOTS = usernames.map((username) => {
-    const mcbot = new MCBot(webContents, username)
+    const mcbot = new MCBot(username)
     return mcbot
   })
 }
