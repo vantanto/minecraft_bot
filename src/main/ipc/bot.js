@@ -94,7 +94,7 @@ const handleIpcBot = () => {
 
 export const sendStatusBotUpdated = (username, status) => {
   const mainWindow = getMainWindow()
-  mainWindow.webContents.send('bot:status-bot-updated', username, status)
+  mainWindow.webContents.send(`bot-${username}:status-bot-updated`, status)
 }
 
 export default handleIpcBot

@@ -45,10 +45,8 @@ const deleteBot = async () => {
   $q.notify(response.message)
 }
 
-api.bot.onStatusBotUpdated((username, status) => {
-  if (botData.value.username == username) {
-    botData.value.status = status
-  }
+api.bot.onStatusBotUpdated(props.data.username, (status) => {
+  botData.value.status = status
 })
 
 watchEffect(() => {

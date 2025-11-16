@@ -28,7 +28,7 @@ onMounted(async () => {
       <q-btn push no-caps label="Add New Bot" color="positive" @click="handleCreate" />
     </div>
 
-    <q-list class="rounded-borders q-my-md">
+    <q-list v-if="bots.length > 0" class="rounded-borders q-my-md">
       <bot-item
         v-for="(bot, index) in bots"
         :key="index"
