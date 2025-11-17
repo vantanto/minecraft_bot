@@ -6,11 +6,15 @@ import { getMcBot } from '../ipc/bot'
 
 let chatWindows = {}
 
+export const getChatWindows = () => {
+  return chatWindows
+}
+
 export const getBotChatWindow = (username) => {
   return username ? chatWindows[username] : null
 }
 
-export const createChatWindow = (index, username) => {
+export const createChatWindow = (username) => {
   let win = getBotChatWindow(username)
 
   if (win && !win.isDestroyed()) {
@@ -28,12 +32,12 @@ export const createChatWindow = (index, username) => {
     })
 
     win.on('closed', () => {
-      const mcbot = getMcBot(index)
+      const mcbot = getMcBot(username)
       mcbot.disableMessageListener()
       win = null
     })
 
-    const route = `/chat/${index}/${username}`
+    const route = `/chat/${username}`
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
       win.loadURL(`${process.env['ELECTRON_RENDERER_URL']}#${route}`)
     } else {

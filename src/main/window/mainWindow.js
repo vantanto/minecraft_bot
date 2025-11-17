@@ -3,6 +3,7 @@ import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import config from '@/config'
 import icon from '/resources/icon.png?asset'
+import { getChatWindows } from './chatWindow'
 
 let mainWindow = null
 
@@ -23,6 +24,14 @@ export const createMainWindow = () => {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+  })
+
+  mainWindow.on('closed', () => {
+    const chatWindows = getChatWindows()
+    for (const username in chatWindows) {
+      const win = chatWindows[username]
+      if (win && !win.isDestroyed()) win.close()
+    }
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {

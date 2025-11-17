@@ -22,7 +22,7 @@ const routes = [
     component: () => import('@renderer/views/layouts/AppMainNoFooter.vue'),
     children: [
       {
-        path: '/chat/:index/:username',
+        path: '/chat/:username',
         name: 'chat',
         props: true,
         component: () => import('@renderer/views/ChatBotView.vue')

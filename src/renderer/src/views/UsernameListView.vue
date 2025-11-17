@@ -29,13 +29,7 @@ onMounted(async () => {
     </div>
 
     <q-list v-if="bots.length > 0" class="rounded-borders q-my-md">
-      <bot-item
-        v-for="(bot, index) in bots"
-        :key="index"
-        :data="bot"
-        :index="index"
-        @update:save="getBots"
-      />
+      <bot-item v-for="(bot) in bots" :key="bot.username" :data="bot" @update:save="getBots" />
     </q-list>
 
     <bot-create-dialog v-model="createDialog" @update:save="getBots" />

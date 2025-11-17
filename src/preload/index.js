@@ -6,14 +6,14 @@ const api = {}
 
 api.getVersion = () => ipcRenderer.invoke('app:get-version')
 api.bot = {
-  getBot: (index) => ipcRenderer.invoke('bot:get-bot', index),
+  getBot: (username) => ipcRenderer.invoke('bot:get-bot', username),
   getBots: () => ipcRenderer.invoke('bot:get-bots'),
   createBot: (username) => ipcRenderer.invoke('bot:create-bot', username),
-  connectBot: async (index) => await ipcRenderer.invoke('bot:connect-bot', index),
-  disconnectBot: async (index) => await ipcRenderer.invoke('bot:disconnect-bot', index),
-  deleteBot: async (index) => await ipcRenderer.invoke('bot:delete-bot', index),
-  openChatBot: (index) => ipcRenderer.send('bot:open-chat-bot', index),
-  sendChatBot: (index, message) => ipcRenderer.send('bot:send-chat-bot', index, message),
+  connectBot: async (username) => await ipcRenderer.invoke('bot:connect-bot', username),
+  disconnectBot: async (username) => await ipcRenderer.invoke('bot:disconnect-bot', username),
+  deleteBot: async (username) => await ipcRenderer.invoke('bot:delete-bot', username),
+  openChatBot: (username) => ipcRenderer.send('bot:open-chat-bot', username),
+  sendChatBot: (username, message) => ipcRenderer.send('bot:send-chat-bot', username, message),
 
   onStatusBotUpdated: (username, callback) =>
     ipcRenderer.on(`bot-${username}:status-bot-updated`, (_event, status) => callback(status)),

@@ -1,7 +1,7 @@
 <script setup>
-import { nextTick, ref } from 'vue'
+import { ref } from 'vue'
 
-const props = defineProps({ index: [Number, String], username: String })
+const props = defineProps({ username: String })
 
 const input = ref()
 const messages = ref([])
@@ -11,7 +11,7 @@ const scrollAreaRef = ref(null)
 function sendMessage() {
   if (!input.value) return
 
-  api.bot.sendChatBot(props.index, input.value)
+  api.bot.sendChatBot(props.username, input.value)
   onReset()
 }
 

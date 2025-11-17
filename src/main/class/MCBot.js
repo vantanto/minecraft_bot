@@ -79,8 +79,8 @@ class MCBot {
     if (this.status !== config.BOT_STATUS.CONNECTED) this.disableMessageListener()
   }
 
-  openChatWindow(index) {
-    createChatWindow(index, this.username)
+  openChatWindow() {
+    createChatWindow(this.username)
     this.enableMessageListener()
   }
 

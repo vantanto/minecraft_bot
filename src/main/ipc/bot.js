@@ -6,16 +6,16 @@ import global from '@/main/global'
 import { getMainWindow } from '@/main/window/mainWindow'
 import { closeChatWindow, getBotChatWindow } from '@/main/window/chatWindow'
 
-export const getMcBot = (index) => {
-  const mcbot = global.BOTS[index]
+export const getMcBot = (username) => {
+  const mcbot = global.BOTS.find((item) => item.username === username)
   if (!(mcbot instanceof MCBot))
     throw new TypeError('Inconsistent types: bot and MCBot must be of the same type.')
 
   return mcbot
 }
 
-const handleGetBot = (_event, index) => {
-  const mcbot = getMcBot(index)
+const handleGetBot = (_event, username) => {
+  const mcbot = getMcBot(username)
   return response.success('Success', mcbot.getData())
 }
 
@@ -39,9 +39,9 @@ const handleCreateBot = async (_event, username) => {
   }
 }
 
-const handleConnectBot = async (_event, index) => {
+const handleConnectBot = async (_event, username) => {
   try {
-    const mcbot = getMcBot(index)
+    const mcbot = getMcBot(username)
     await mcbot.initBot()
     return response.success('Connected')
   } catch (err) {
@@ -49,9 +49,9 @@ const handleConnectBot = async (_event, index) => {
   }
 }
 
-const handleDisconnectBot = async (_event, index) => {
+const handleDisconnectBot = async (_event, username) => {
   try {
-    const mcbot = getMcBot(index)
+    const mcbot = getMcBot(username)
     await mcbot.disconnect()
     return response.success('Disconnected')
   } catch (err) {
@@ -59,12 +59,12 @@ const handleDisconnectBot = async (_event, index) => {
   }
 }
 
-const handleDeleteBot = async (_event, index) => {
+const handleDeleteBot = async (_event, username) => {
   try {
-    const mcbot = getMcBot(index)
+    const mcbot = getMcBot(username)
     await mcbot.disconnect()
-    closeChatWindow(mcbot.username)
-    global.BOTS.splice(index, 1)
+    closeChatWindow(username)
+    global.BOTS.splice(username, 1)
     await updateServerUsernames()
     return response.success('Deleted')
   } catch (err) {
@@ -72,13 +72,14 @@ const handleDeleteBot = async (_event, index) => {
   }
 }
 
-const onOpenChatBot = (_event, index) => {
-  const mcbot = getMcBot(index)
-  mcbot.openChatWindow(index)
+const onOpenChatBot = (_event, username) => {
+  const mcbot = getMcBot(username)
+  mcbot.openChatWindow(username)
 }
 
-const onSendChatBot = (_event, index, message) => {
-  const mcbot = getMcBot(index)
+const onSendChatBot = (_event, username, message) => {
+  console.log(username)
+  const mcbot = getMcBot(username)
   mcbot.sendChat(message)
 }
 
