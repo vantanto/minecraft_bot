@@ -1,7 +1,7 @@
 import mineflayer from 'mineflayer'
 import config from '@/config'
 import global from '@/main/global'
-import { sendStatusBotUpdated } from '@/main/ipc/bot'
+import { sendMessageBotReceived, sendStatusBotUpdated } from '@/main/ipc/bot'
 import { createChatWindow } from '@/main/window/chatWindow'
 
 let botArgs = { host: 'localhost', port: 25565, version: '1.20.1' }
@@ -14,7 +14,7 @@ class MCBot {
     this.version = global.SERVER.version
     this.status = config.BOT_STATUS.DISCONNECTED
     this.bot = null
-    this.chatWindow = null
+    this.messageListener = false
   }
 
   async initBot() {
@@ -75,14 +75,33 @@ class MCBot {
   setStatus(status) {
     this.status = status
     sendStatusBotUpdated(this.username, this.status)
+
+    if (this.status !== config.BOT_STATUS.CONNECTED) this.disableMessageListener()
   }
 
   openChatWindow(index) {
     createChatWindow(index, this.username)
+    this.enableMessageListener()
   }
 
   sendChat(message) {
     this.bot.chat(message)
+  }
+
+  messageHandler(message) {
+    sendMessageBotReceived(this.username, message)
+  }
+
+  enableMessageListener() {
+    if (this.messageListener) return
+    this.bot.on('message', this.messageHandler)
+    this.messageListener = true
+  }
+
+  disableMessageListener() {
+    if (!this.messageListener) return
+    this.bot.off('message', this.messageHandler)
+    this.messageListener = false
   }
 }
 

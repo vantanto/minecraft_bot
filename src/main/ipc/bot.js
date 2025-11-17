@@ -4,8 +4,9 @@ import { updateServerUsernames } from './storage'
 import MCBot from '@/main/class/MCBot'
 import global from '@/main/global'
 import { getMainWindow } from '@/main/window/mainWindow'
+import { closeChatWindow, getBotChatWindow } from '@/main/window/chatWindow'
 
-const getMcBot = (index) => {
+export const getMcBot = (index) => {
   const mcbot = global.BOTS[index]
   if (!(mcbot instanceof MCBot))
     throw new TypeError('Inconsistent types: bot and MCBot must be of the same type.')
@@ -62,6 +63,7 @@ const handleDeleteBot = async (_event, index) => {
   try {
     const mcbot = getMcBot(index)
     await mcbot.disconnect()
+    closeChatWindow(mcbot.username)
     global.BOTS.splice(index, 1)
     await updateServerUsernames()
     return response.success('Deleted')
@@ -94,6 +96,13 @@ const handleIpcBot = () => {
 export const sendStatusBotUpdated = (username, status) => {
   const mainWindow = getMainWindow()
   mainWindow.webContents.send(`bot-${username}:status-bot-updated`, status)
+}
+
+export const sendMessageBotReceived = (username, message) => {
+  const chatWindow = getBotChatWindow(username)
+  if (chatWindow) {
+    chatWindow.webContents.send(`bot-${username}:message-bot-received`, message.toString())
+  }
 }
 
 export default handleIpcBot

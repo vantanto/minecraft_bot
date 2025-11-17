@@ -1,29 +1,35 @@
 import { BrowserWindow } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
+import icon from '/resources/icon.png?asset'
+import { getMcBot } from '../ipc/bot'
 
 let chatWindows = {}
 
-export const createChatWindow = (index, username) => {
-  if (!username) return
+export const getBotChatWindow = (username) => {
+  return username ? chatWindows[username] : null
+}
 
-  let win = chatWindows[username]
+export const createChatWindow = (index, username) => {
+  let win = getBotChatWindow(username)
 
   if (win && !win.isDestroyed()) {
-    console.log('exists')
     win.show()
   } else {
     win = new BrowserWindow({
       width: 800,
       height: 500,
       autoHideMenuBar: true,
+      ...(process.platform === 'linux' ? { icon } : {}),
       webPreferences: {
-        preload: join(__dirname, '../../preload/index.js'),
+        preload: join(__dirname, '../preload/index.js'),
         sandbox: false
       }
     })
 
     win.on('closed', () => {
+      const mcbot = getMcBot(index)
+      mcbot.disableMessageListener()
       win = null
     })
 
@@ -31,11 +37,19 @@ export const createChatWindow = (index, username) => {
     if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
       win.loadURL(`${process.env['ELECTRON_RENDERER_URL']}#${route}`)
     } else {
-      win.loadFile(join(__dirname, '../../../renderer/index.html'), { hash: route })
+      win.loadFile(join(__dirname, '../renderer/index.html'), { hash: route })
     }
 
     chatWindows[username] = win
   }
 
   return win
+}
+
+export const closeChatWindow = (username) => {
+  const win = getBotChatWindow(username)
+
+  if (win && !win.isDestroyed()) {
+    win.close()
+  }
 }
