@@ -1,6 +1,6 @@
 {
   "name": "minecraft_bot",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Connecting Minecraft bot to a server, featuring an intuitive graphical user interface (GUI).",
   "main": "./out/main/index.js",
   "author": {
