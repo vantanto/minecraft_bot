@@ -1,5 +1,4 @@
 import { ipcMain } from 'electron'
-import mineflayer from 'mineflayer'
 import response from './response'
 import { updateServerUsernames } from './storage'
 import MCBot from '@/main/class/MCBot'

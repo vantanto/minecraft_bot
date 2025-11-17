@@ -1,10 +1,8 @@
 import mineflayer from 'mineflayer'
 import config from '@/config'
 import global from '@/main/global'
-import { BrowserWindow } from 'electron'
-import { join } from 'path'
-import { is } from '@electron-toolkit/utils'
-import { sendStatusBotUpdated } from '../ipc/bot'
+import { sendStatusBotUpdated } from '@/main/ipc/bot'
+import { createChatWindow } from '@/main/window/chatWindow'
 
 let botArgs = { host: 'localhost', port: 25565, version: '1.20.1' }
 
@@ -80,35 +78,7 @@ class MCBot {
   }
 
   openChatWindow(index) {
-    if (this.chatWindow && !this.chatWindow.isDestroyed()) {
-      console.log('open exists')
-      this.chatWindow.show()
-      return this.chatWindow
-    }
-
-    const win = new BrowserWindow({
-      width: 800,
-      height: 500,
-      autoHideMenuBar: true,
-      webPreferences: {
-        preload: join(__dirname, '../preload/index.js'),
-        sandbox: false
-      }
-    })
-
-    win.on('closed', () => {
-      this.chatWindow = null
-    })
-
-    const route = `/chat/${index}/${this.username}`
-    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-      win.loadURL(`${process.env['ELECTRON_RENDERER_URL']}#${route}`)
-    } else {
-      win.loadFile(join(__dirname, '../../renderer/index.html'), { hash: route })
-    }
-
-    this.chatWindow = win
-    return win
+    createChatWindow(index, this.username)
   }
 
   sendChat(message) {
