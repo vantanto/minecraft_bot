@@ -4,7 +4,7 @@ import response from './response'
 import { updateServerUsernames } from './storage'
 import MCBot from '@/main/class/MCBot'
 import global from '@/main/global'
-import { getMainWindow } from '../mainWindow'
+import { getMainWindow } from '@/main/window/mainWindow'
 
 const getMcBot = (index) => {
   const mcbot = global.BOTS[index]

@@ -1,8 +1,7 @@
 import { app, shell, BrowserWindow } from 'electron'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import handleIpcMain from './ipc/index'
-import config from '@/config'
-import { createWindow } from './mainWindow'
+import { createMainWindow } from './window/mainWindow'
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -18,7 +17,7 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  createWindow()
+  createMainWindow()
 
   handleIpcMain()
 

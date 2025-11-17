@@ -6,7 +6,7 @@ import icon from '../../resources/icon.png?asset'
 
 let mainWindow = null
 
-export const createWindow = () => {
+export const createMainWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 900,
