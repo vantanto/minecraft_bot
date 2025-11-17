@@ -1,12 +1,15 @@
-import { ipcMain } from 'electron'
 import Storage from 'electron-json-storage'
-import response from './response'
-import global from '@/main/global'
+
+import { ipcMain } from 'electron'
+
 import MCBot from '@/main/class/MCBot'
+import global from '@/main/global'
+
+import response from './response'
 
 const storage = Storage
 const KEYS = {
-  SERVERS: 'servers'
+  SERVERS: 'servers',
 }
 
 const getStorage = (key) => {
@@ -27,7 +30,9 @@ const setStorage = async (key, data) => {
 
 export const updateServerUsernames = async () => {
   const servers = getServers()
-  servers[global.SERVER.host].usernames = global.BOTS.map((item) => item.username)
+  servers[global.SERVER.host].usernames = global.BOTS.map(
+    (item) => item.username,
+  )
 
   await setStorage(KEYS.SERVERS, servers)
 }

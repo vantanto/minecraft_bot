@@ -1,7 +1,10 @@
 export const registerPlugins = (app) => {
-  const imports = import.meta.glob(['../plugins/quasar/index.js', '../plugins/router/index.js'], {
-    eager: true
-  })
+  const imports = import.meta.glob(
+    ['../plugins/quasar/index.js', '../plugins/router/index.js'],
+    {
+      eager: true,
+    },
+  )
   const importPaths = Object.keys(imports).sort()
 
   importPaths.forEach((path) => {

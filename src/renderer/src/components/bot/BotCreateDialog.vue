@@ -1,6 +1,7 @@
 <script setup>
-import { ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { ref } from 'vue'
+
 import config from '@/config'
 
 const $q = useQuasar()
@@ -41,12 +42,20 @@ const resetForm = () => {
             dense
             v-model="form.username"
             autofocus
-            :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+            :rules="[
+              (val) => (val && val.length > 0) || 'Please type something',
+            ]"
           />
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancel" v-close-popup :disable="loading" @click="resetForm" />
+          <q-btn
+            flat
+            label="Cancel"
+            v-close-popup
+            :disable="loading"
+            @click="resetForm"
+          />
           <q-btn flat type="submit" label="Save" :loading="loading" />
         </q-card-actions>
       </q-form>

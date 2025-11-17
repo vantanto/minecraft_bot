@@ -1,5 +1,7 @@
-import { app, shell, BrowserWindow } from 'electron'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { electronApp, is, optimizer } from '@electron-toolkit/utils'
+
+import { BrowserWindow, app, shell } from 'electron'
+
 import handleIpcMain from './ipc/index'
 import { createMainWindow } from './window/mainWindow'
 

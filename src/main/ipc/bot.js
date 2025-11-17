@@ -1,15 +1,19 @@
 import { ipcMain } from 'electron'
-import response from './response'
-import { updateServerUsernames } from './storage'
+
 import MCBot from '@/main/class/MCBot'
 import global from '@/main/global'
-import { getMainWindow } from '@/main/window/mainWindow'
 import { closeChatWindow, getBotChatWindow } from '@/main/window/chatWindow'
+import { getMainWindow } from '@/main/window/mainWindow'
+
+import response from './response'
+import { updateServerUsernames } from './storage'
 
 export const getMcBot = (username) => {
   const mcbot = global.BOTS.find((item) => item.username === username)
   if (!(mcbot instanceof MCBot))
-    throw new TypeError('Inconsistent types: bot and MCBot must be of the same type.')
+    throw new TypeError(
+      'Inconsistent types: bot and MCBot must be of the same type.',
+    )
 
   return mcbot
 }
@@ -102,7 +106,10 @@ export const sendStatusBotUpdated = (username, status) => {
 export const sendMessageBotReceived = (username, message) => {
   const chatWindow = getBotChatWindow(username)
   if (chatWindow) {
-    chatWindow.webContents.send(`bot-${username}:message-bot-received`, message.toString())
+    chatWindow.webContents.send(
+      `bot-${username}:message-bot-received`,
+      message.toString(),
+    )
   }
 }
 

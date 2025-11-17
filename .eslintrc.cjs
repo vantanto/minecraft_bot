@@ -6,15 +6,15 @@ module.exports = {
     'eslint:recommended',
     'plugin:vue/vue3-recommended',
     '@electron-toolkit',
-    '@vue/eslint-config-prettier'
+    '@vue/eslint-config-prettier',
   ],
   rules: {
     'prettier/prettier': [
       {
-        endOfLine: 'auto'
-      }
+        endOfLine: 'auto',
+      },
     ],
     'vue/require-default-prop': 'off',
-    'vue/multi-word-component-names': 'off'
-  }
+    'vue/multi-word-component-names': 'off',
+  },
 }

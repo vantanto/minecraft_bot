@@ -1,8 +1,9 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import ServerInfo from '@renderer/components/ServerInfo.vue'
 import BotCreateDialog from '@renderer/components/bot/BotCreateDialog.vue'
 import BotItem from '@renderer/components/bot/BotItem.vue'
-import ServerInfo from '@renderer/components/ServerInfo.vue'
+
+import { onMounted, ref } from 'vue'
 
 const bots = ref([])
 const createDialog = ref(false)
@@ -25,11 +26,22 @@ onMounted(async () => {
   <q-page class="q-pa-md">
     <ServerInfo class="q-mb-md" />
     <div class="flex justify-center">
-      <q-btn push no-caps label="Add New Bot" color="positive" @click="handleCreate" />
+      <q-btn
+        push
+        no-caps
+        label="Add New Bot"
+        color="positive"
+        @click="handleCreate"
+      />
     </div>
 
     <q-list v-if="bots.length > 0" class="rounded-borders q-my-md">
-      <bot-item v-for="(bot) in bots" :key="bot.username" :data="bot" @update:save="getBots" />
+      <bot-item
+        v-for="bot in bots"
+        :key="bot.username"
+        :data="bot"
+        @update:save="getBots"
+      />
     </q-list>
 
     <bot-create-dialog v-model="createDialog" @update:save="getBots" />

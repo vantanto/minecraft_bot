@@ -1,8 +1,10 @@
 <script setup>
-import { ref, watchEffect } from 'vue'
-import { useQuasar } from 'quasar'
-import config from '@/config'
 import BotStatus from '@renderer/components/bot/BotStatus.vue'
+
+import { useQuasar } from 'quasar'
+import { ref, watchEffect } from 'vue'
+
+import config from '@/config'
 
 const $q = useQuasar()
 
@@ -23,7 +25,8 @@ const connectBot = async () => {
   loading.value.connect = true
   const response = await api.bot.connectBot(props.data.username)
   loading.value.connect = false
-  if (response.status === config.RESPONSE_STATUS.ERROR) $q.notify(response.message)
+  if (response.status === config.RESPONSE_STATUS.ERROR)
+    $q.notify(response.message)
 }
 
 const disconnectBot = async () => {
@@ -67,24 +70,54 @@ watchEffect(() => {
     <q-item-section top side>
       <div class="q-gutter-xs">
         <!-- CONNECT -->
-        <q-btn v-if="botData.status !== config.BOT_STATUS.CONNECTED" dense flat color="positive" icon="play_arrow"
-          :loading="loading.connect" @click="connectBot">
+        <q-btn
+          v-if="botData.status !== config.BOT_STATUS.CONNECTED"
+          dense
+          flat
+          color="positive"
+          icon="play_arrow"
+          :loading="loading.connect"
+          @click="connectBot"
+        >
           <q-tooltip>Connect</q-tooltip>
         </q-btn>
 
         <!-- DISCONNECT -->
-        <q-btn v-else dense flat color="negative" icon="stop" :loading="loading.connect" @click="disconnectBot">
+        <q-btn
+          v-else
+          dense
+          flat
+          color="negative"
+          icon="stop"
+          :loading="loading.connect"
+          @click="disconnectBot"
+        >
           <q-tooltip>Disconnect</q-tooltip>
         </q-btn>
 
         <!-- CHAT -->
-        <q-btn dense flat :color="botData.status == config.BOT_STATUS.CONNECTED ? 'primary' : ''" icon="chat_bubble"
-          :disable="botData.status !== config.BOT_STATUS.CONNECTED" @click="openChatBot">
+        <q-btn
+          dense
+          flat
+          :color="
+            botData.status == config.BOT_STATUS.CONNECTED ? 'primary' : ''
+          "
+          icon="chat_bubble"
+          :disable="botData.status !== config.BOT_STATUS.CONNECTED"
+          @click="openChatBot"
+        >
           <q-tooltip>Chat</q-tooltip>
         </q-btn>
 
         <!-- DELETE -->
-        <q-btn dense flat color="negative" icon="delete" :loading="loading.delete" @click="deleteBot">
+        <q-btn
+          dense
+          flat
+          color="negative"
+          icon="delete"
+          :loading="loading.delete"
+          @click="deleteBot"
+        >
           <q-tooltip>Delete</q-tooltip>
         </q-btn>
       </div>

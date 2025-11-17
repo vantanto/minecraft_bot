@@ -1,8 +1,10 @@
-import { BrowserWindow } from 'electron'
-import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
-import icon from '/resources/icon.png?asset'
+import { join } from 'path'
+
+import { BrowserWindow } from 'electron'
+
 import { getMcBot } from '../ipc/bot'
+import icon from '/resources/icon.png?asset'
 
 let chatWindows = {}
 
@@ -27,8 +29,8 @@ export const createChatWindow = (username) => {
       ...(process.platform === 'linux' ? { icon } : {}),
       webPreferences: {
         preload: join(__dirname, '../preload/index.js'),
-        sandbox: false
-      }
+        sandbox: false,
+      },
     })
 
     win.on('closed', () => {

@@ -1,4 +1,5 @@
 import mineflayer from 'mineflayer'
+
 import config from '@/config'
 import global from '@/main/global'
 import { sendMessageBotReceived, sendStatusBotUpdated } from '@/main/ipc/bot'
@@ -22,7 +23,7 @@ class MCBot {
       username: this.username,
       host: this.host,
       port: this.port,
-      version: this.version
+      version: this.version,
     })
 
     await this.initEvents()
@@ -34,7 +35,7 @@ class MCBot {
       this.bot.once('login', () => {
         let botSocket = this.bot._client.socket
         console.log(
-          `[${this.username}] Logged in to ${botSocket.server ? botSocket.server : botSocket._host}`
+          `[${this.username}] Logged in to ${botSocket.server ? botSocket.server : botSocket._host}`,
         )
         // resolve('login')
       })
@@ -54,7 +55,9 @@ class MCBot {
       this.bot.once('error', (err) => {
         this.setStatus(config.BOT_STATUS.UNABLE_CONNECT)
         if (err.code == 'ECONNREFUSED') {
-          console.log(`[${this.username}] Failed to connect to ${err.address}:${err.port}`)
+          console.log(
+            `[${this.username}] Failed to connect to ${err.address}:${err.port}`,
+          )
         } else {
           console.log(`[${this.username}] Unhandled error: ${err}`)
         }
@@ -76,7 +79,8 @@ class MCBot {
     this.status = status
     sendStatusBotUpdated(this.username, this.status)
 
-    if (this.status !== config.BOT_STATUS.CONNECTED) this.disableMessageListener()
+    if (this.status !== config.BOT_STATUS.CONNECTED)
+      this.disableMessageListener()
   }
 
   openChatWindow() {

@@ -1,6 +1,7 @@
 <script setup>
-import { onMounted, ref } from 'vue'
 import router from '@renderer/plugins/router'
+
+import { onMounted, ref } from 'vue'
 
 const form = ref({})
 const loading = ref(false)
@@ -10,7 +11,9 @@ const hosts = ref([])
 const filterFn = (val, update, abort) => {
   update(() => {
     const needle = val.toLowerCase()
-    hosts.value = Object.keys(servers.value).filter((v) => v.toLowerCase().indexOf(needle) > -1)
+    hosts.value = Object.keys(servers.value).filter(
+      (v) => v.toLowerCase().indexOf(needle) > -1,
+    )
   })
 }
 
@@ -33,7 +36,7 @@ const handleSubmitForm = async () => {
   await api.storage.setServer({
     host: form.value.host,
     port: form.value.port,
-    version: form.value.version
+    version: form.value.version,
   })
   router.push({ name: 'usernames' })
 }
@@ -63,13 +66,17 @@ onMounted(() => {
               label="Host"
               :model-value="form.host"
               :options="hosts"
-              :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+              :rules="[
+                (val) => (val && val.length > 0) || 'Please type something',
+              ]"
               @input-value="onChangeHost"
               @filter="filterFn"
             >
               <template v-slot:no-option>
                 <q-item>
-                  <q-item-section class="text-grey"> No results </q-item-section>
+                  <q-item-section class="text-grey">
+                    No results
+                  </q-item-section>
                 </q-item>
               </template>
             </q-select>
@@ -77,13 +84,18 @@ onMounted(() => {
               dense
               v-model="form.port"
               label="Port"
-              :rules="[(val) => (val !== '' && val !== null) || 'Please type something']"
+              :rules="[
+                (val) =>
+                  (val !== '' && val !== null) || 'Please type something',
+              ]"
             />
             <q-input
               dense
               v-model="form.version"
               label="Minecraft Version"
-              :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+              :rules="[
+                (val) => (val && val.length > 0) || 'Please type something',
+              ]"
             />
           </q-card-section>
 

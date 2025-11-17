@@ -20,8 +20,12 @@ function onReset() {
 }
 
 function scrollToBottom() {
-  const scrollTarget = scrollAreaRef.value?.getScrollTarget();
-  scrollAreaRef.value?.setScrollPosition('vertical', scrollTarget.scrollHeight, 50);
+  const scrollTarget = scrollAreaRef.value?.getScrollTarget()
+  scrollAreaRef.value?.setScrollPosition(
+    'vertical',
+    scrollTarget.scrollHeight,
+    50,
+  )
 }
 
 api.bot.onMessageBotReceived(props.username, (message) => {
@@ -39,14 +43,34 @@ api.bot.onMessageBotReceived(props.username, (message) => {
 
     <!-- Chat Messages -->
     <q-scroll-area ref="scrollAreaRef" class="col-grow q-border q-my-sm">
-      <div v-for="(message, index) in messages" :key="index" class="q-my-xs q-mr-xs">{{ message }}</div>
+      <div
+        v-for="(message, index) in messages"
+        :key="index"
+        class="q-my-xs q-mr-xs"
+      >
+        {{ message }}
+      </div>
     </q-scroll-area>
 
     <!-- Input -->
     <div class="row items-center q-pa-sm">
-      <q-input v-model="input" autofocus dense outlined class="col-grow" placeholder="Type a message..."
-        @keyup.enter="sendMessage" />
-      <q-btn round dense flat icon="send" class="q-ml-sm" @click="sendMessage" />
+      <q-input
+        v-model="input"
+        autofocus
+        dense
+        outlined
+        class="col-grow"
+        placeholder="Type a message..."
+        @keyup.enter="sendMessage"
+      />
+      <q-btn
+        round
+        dense
+        flat
+        icon="send"
+        class="q-ml-sm"
+        @click="sendMessage"
+      />
     </div>
   </q-page>
 </template>

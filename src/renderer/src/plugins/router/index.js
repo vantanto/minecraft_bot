@@ -1,4 +1,4 @@
-import { createWebHashHistory, createRouter } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
   {
@@ -9,14 +9,14 @@ const routes = [
       {
         path: '/',
         name: 'index',
-        component: () => import('@renderer/views/ServerSelectorView.vue')
+        component: () => import('@renderer/views/ServerSelectorView.vue'),
       },
       {
         path: '/usernames',
         name: 'usernames',
-        component: () => import('@renderer/views/UsernameListView.vue')
-      }
-    ]
+        component: () => import('@renderer/views/UsernameListView.vue'),
+      },
+    ],
   },
   {
     component: () => import('@renderer/views/layouts/AppMainNoFooter.vue'),
@@ -25,10 +25,10 @@ const routes = [
         path: '/chat/:username',
         name: 'chat',
         props: true,
-        component: () => import('@renderer/views/ChatBotView.vue')
-      }
-    ]
-  }
+        component: () => import('@renderer/views/ChatBotView.vue'),
+      },
+    ],
+  },
 ]
 
 const router = createRouter({
@@ -36,7 +36,7 @@ const router = createRouter({
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 }
   },
-  routes
+  routes,
 })
 
 export default router

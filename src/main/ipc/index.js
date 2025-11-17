@@ -1,4 +1,5 @@
 import { app, ipcMain } from 'electron'
+
 import handleIpcBot from './bot.js'
 import handleIpcStorage from './storage.js'
 

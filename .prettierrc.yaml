@@ -1,4 +1,13 @@
 singleQuote: true
+trailingComma: all
 semi: false
-printWidth: 100
-trailingComma: none
+tabWidth: 2
+plugins:
+  - '@trivago/prettier-plugin-sort-imports'
+importOrder:
+  - '^electron$' # Electron built-ins
+  - '^(vue|quasar|axios|pinia)$' # External packages
+  - '^@/' # Aliases (like @/components)
+  - '^[./]' # Relative imports
+importOrderSeparation: true # Add newline between groups
+importOrderSortSpecifiers: true # Sort named imports alphabetically

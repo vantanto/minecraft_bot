@@ -1,9 +1,12 @@
-import { BrowserWindow } from 'electron'
-import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
+import { join } from 'path'
+
+import { BrowserWindow } from 'electron'
+
 import config from '@/config'
-import icon from '/resources/icon.png?asset'
+
 import { getChatWindows } from './chatWindow'
+import icon from '/resources/icon.png?asset'
 
 let mainWindow = null
 
@@ -18,8 +21,8 @@ export const createMainWindow = () => {
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
-    }
+      sandbox: false,
+    },
   })
 
   mainWindow.on('ready-to-show', () => {
