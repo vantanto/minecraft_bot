@@ -1,6 +1,5 @@
 <script setup>
 import router from '@renderer/plugins/router'
-
 import { onMounted, ref } from 'vue'
 
 const form = ref({})
@@ -8,16 +7,16 @@ const loading = ref(false)
 const servers = ref([])
 const hosts = ref([])
 
-const filterFn = (val, update, abort) => {
+function filterFn(val, update) {
   update(() => {
     const needle = val.toLowerCase()
     hosts.value = Object.keys(servers.value).filter(
-      (v) => v.toLowerCase().indexOf(needle) > -1,
+      v => v.toLowerCase().includes(needle),
     )
   })
 }
 
-const onChangeHost = (val) => {
+function onChangeHost(val) {
   form.value.host = val
   const server = servers.value[val]
   if (server) {
@@ -26,12 +25,12 @@ const onChangeHost = (val) => {
   }
 }
 
-const getServers = async () => {
+async function getServers() {
   const response = await api.storage.getServers()
   servers.value = response.data
 }
 
-const handleSubmitForm = async () => {
+async function handleSubmitForm() {
   loading.value = true
   await api.storage.setServer({
     host: form.value.host,
@@ -41,7 +40,7 @@ const handleSubmitForm = async () => {
   router.push({ name: 'usernames' })
 }
 
-const resetForm = () => {
+function resetForm() {
   form.value = { port: 25565, version: '1.20.1' }
 }
 
@@ -72,7 +71,7 @@ onMounted(() => {
               @input-value="onChangeHost"
               @filter="filterFn"
             >
-              <template v-slot:no-option>
+              <template #no-option>
                 <q-item>
                   <q-item-section class="text-grey">
                     No results
@@ -81,8 +80,8 @@ onMounted(() => {
               </template>
             </q-select>
             <q-input
-              dense
               v-model="form.port"
+              dense
               label="Port"
               :rules="[
                 (val) =>
@@ -90,8 +89,8 @@ onMounted(() => {
               ]"
             />
             <q-input
-              dense
               v-model="form.version"
+              dense
               label="Minecraft Version"
               :rules="[
                 (val) => (val && val.length > 0) || 'Please type something',

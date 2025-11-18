@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue'
 
 const server = ref({})
 
-const getServer = async () => {
+async function getServer() {
   const response = await api.storage.getServer()
   server.value = response.data
 }

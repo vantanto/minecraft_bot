@@ -7,6 +7,6 @@ import AppFooter from '@renderer/views/layouts/AppFooter.vue'
     <q-page-container>
       <router-view />
     </q-page-container>
-    <app-footer />
+    <AppFooter />
   </q-layout>
 </template>

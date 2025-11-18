@@ -1,27 +1,26 @@
 <script setup>
 import BotStatus from '@renderer/components/bot/BotStatus.vue'
-
 import { useQuasar } from 'quasar'
 import { ref, watchEffect } from 'vue'
-
 import config from '@/config'
 
-const $q = useQuasar()
-
-const emit = defineEmits(['update:save'])
 const props = defineProps({
   data: Object,
 })
 
+const emit = defineEmits(['update:save'])
+
+const $q = useQuasar()
+
 const botData = ref({})
 const loading = ref({})
 
-const getBot = async () => {
-  const response = await api.bot.getBot(props.data.username)
-  botData.value = response.data
-}
+// async function getBot() {
+//   const response = await api.bot.getBot(props.data.username)
+//   botData.value = response.data
+// }
 
-const connectBot = async () => {
+async function connectBot() {
   loading.value.connect = true
   const response = await api.bot.connectBot(props.data.username)
   loading.value.connect = false
@@ -29,17 +28,17 @@ const connectBot = async () => {
     $q.notify(response.message)
 }
 
-const disconnectBot = async () => {
+async function disconnectBot() {
   loading.value.connect = true
   await api.bot.disconnectBot(props.data.username)
   loading.value.connect = false
 }
 
-const openChatBot = () => {
+function openChatBot() {
   api.bot.openChatBot(props.data.username)
 }
 
-const deleteBot = async () => {
+async function deleteBot() {
   loading.value.delete = true
   const response = await api.bot.deleteBot(props.data.username)
   loading.value.delete = false
@@ -60,12 +59,12 @@ watchEffect(() => {
   <q-item v-if="botData.username">
     <q-item-section side>
       <q-avatar rounded size="48px">
-        <img :src="config.getMcAvatar(botData.username)" />
+        <img :src="config.getMcAvatar(botData.username)">
       </q-avatar>
     </q-item-section>
     <q-item-section>
       <q-item-label>{{ botData.username }}</q-item-label>
-      <bot-status :status="botData.status" />
+      <BotStatus :status="botData.status" />
     </q-item-section>
     <q-item-section top side>
       <div class="q-gutter-xs">
@@ -100,7 +99,7 @@ watchEffect(() => {
           dense
           flat
           :color="
-            botData.status == config.BOT_STATUS.CONNECTED ? 'primary' : ''
+            botData.status === config.BOT_STATUS.CONNECTED ? 'primary' : ''
           "
           icon="chat_bubble"
           :disable="botData.status !== config.BOT_STATUS.CONNECTED"

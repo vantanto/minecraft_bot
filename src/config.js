@@ -9,7 +9,7 @@ const config = {
     SUCCESS: 'success',
     ERROR: 'error',
   },
-  getMcAvatar: (username) => `https://mc-heads.net/avatar/${username}`,
+  getMcAvatar: username => `https://mc-heads.net/avatar/${username}`,
 }
 
 export default config

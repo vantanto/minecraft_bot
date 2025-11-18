@@ -1,19 +1,18 @@
 <script setup>
-import ServerInfo from '@renderer/components/ServerInfo.vue'
 import BotCreateDialog from '@renderer/components/bot/BotCreateDialog.vue'
 import BotItem from '@renderer/components/bot/BotItem.vue'
-
+import ServerInfo from '@renderer/components/ServerInfo.vue'
 import { onMounted, ref } from 'vue'
 
 const bots = ref([])
 const createDialog = ref(false)
 
-const getBots = async () => {
+async function getBots() {
   const response = await api.bot.getBots()
   bots.value = response.data
 }
 
-const handleCreate = () => {
+function handleCreate() {
   createDialog.value = true
 }
 
@@ -36,7 +35,7 @@ onMounted(async () => {
     </div>
 
     <q-list v-if="bots.length > 0" class="rounded-borders q-my-md">
-      <bot-item
+      <BotItem
         v-for="bot in bots"
         :key="bot.username"
         :data="bot"
@@ -44,6 +43,6 @@ onMounted(async () => {
       />
     </q-list>
 
-    <bot-create-dialog v-model="createDialog" @update:save="getBots" />
+    <BotCreateDialog v-model="createDialog" @update:save="getBots" />
   </q-page>
 </template>

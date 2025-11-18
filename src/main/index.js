@@ -1,7 +1,6 @@
-import { electronApp, is, optimizer } from '@electron-toolkit/utils'
-
-import { BrowserWindow, app, shell } from 'electron'
-
+import process from 'node:process'
+import { electronApp, optimizer } from '@electron-toolkit/utils'
+import { app, BrowserWindow } from 'electron'
 import handleIpcMain from './ipc/index'
 import { createMainWindow } from './window/mainWindow'
 
@@ -23,10 +22,11 @@ app.whenReady().then(() => {
 
   handleIpcMain()
 
-  app.on('activate', function () {
+  app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+    if (BrowserWindow.getAllWindows().length === 0)
+      createMainWindow()
   })
 })
 

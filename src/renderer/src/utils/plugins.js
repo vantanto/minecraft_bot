@@ -1,4 +1,4 @@
-export const registerPlugins = (app) => {
+export function registerPlugins(app) {
   const imports = import.meta.glob(
     ['../plugins/quasar/index.js', '../plugins/router/index.js'],
     {

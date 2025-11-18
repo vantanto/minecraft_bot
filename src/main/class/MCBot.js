@@ -1,11 +1,8 @@
 import mineflayer from 'mineflayer'
-
 import config from '@/config'
 import global from '@/main/global'
 import { sendMessageBotReceived, sendStatusBotUpdated } from '@/main/ipc/bot'
 import { createChatWindow } from '@/main/window/chatWindow'
-
-let botArgs = { host: 'localhost', port: 25565, version: '1.20.1' }
 
 class MCBot {
   constructor(username) {
@@ -33,41 +30,29 @@ class MCBot {
   async initEvents() {
     return new Promise((resolve, reject) => {
       this.bot.once('login', () => {
-        let botSocket = this.bot._client.socket
-        console.log(
-          `[${this.username}] Logged in to ${botSocket.server ? botSocket.server : botSocket._host}`,
-        )
         // resolve('login')
       })
 
       this.bot.once('spawn', async () => {
         this.setStatus(config.BOT_STATUS.CONNECTED)
-        console.log(`[${this.username}] Spawned in`)
         resolve('spawn')
       })
 
       this.bot.once('end', (reason) => {
         this.setStatus(config.BOT_STATUS.DISCONNECTED)
-        console.log(`[${this.username}] Disconnected: ${reason}`)
         reject(reason)
       })
 
       this.bot.once('error', (err) => {
         this.setStatus(config.BOT_STATUS.UNABLE_CONNECT)
-        if (err.code == 'ECONNREFUSED') {
-          console.log(
-            `[${this.username}] Failed to connect to ${err.address}:${err.port}`,
-          )
-        } else {
-          console.log(`[${this.username}] Unhandled error: ${err}`)
-        }
         reject(err)
       })
     })
   }
 
   async disconnect() {
-    if (this.bot) await this.bot.quit()
+    if (this.bot)
+      this.bot.quit()
     this.setStatus(config.BOT_STATUS.DISCONNECTED)
   }
 
@@ -97,13 +82,15 @@ class MCBot {
   }
 
   enableMessageListener() {
-    if (this.messageListener) return
+    if (this.messageListener)
+      return
     this.bot.on('message', this.messageHandler)
     this.messageListener = true
   }
 
   disableMessageListener() {
-    if (!this.messageListener) return
+    if (!this.messageListener)
+      return
     this.bot.off('message', this.messageHandler)
     this.messageListener = false
   }

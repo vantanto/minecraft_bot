@@ -1,7 +1,6 @@
+import { Notify, Quasar } from 'quasar'
 import '@quasar/extras/material-icons/material-icons.css'
 import 'quasar/src/css/index.sass'
-
-import { Notify, Quasar } from 'quasar'
 
 const quasar = {
   install(app) {

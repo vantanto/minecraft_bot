@@ -2,15 +2,14 @@
   "name": "minecraft_bot",
   "version": "1.2.0",
   "description": "Connecting Minecraft bot to a server, featuring an intuitive graphical user interface (GUI).",
-  "main": "./out/main/index.js",
   "author": {
     "name": "vantanto.github.io",
     "email": "kristanto.margojoyo99@gmail.com"
   },
   "homepage": "https://github.com/vantanto",
+  "main": "./out/main/index.js",
   "scripts": {
-    "format": "prettier --write .",
-    "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
+    "lint": "eslint --fix",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "watch": "electron-vite dev --watch",
@@ -31,16 +30,15 @@
     "vue-router": "^4.6.3"
   },
   "devDependencies": {
-    "@electron-toolkit/eslint-config": "^2.1.0",
+    "@antfu/eslint-config": "^6.2.0",
     "@quasar/vite-plugin": "^1.10.0",
     "@rushstack/eslint-patch": "^1.15.0",
-    "@trivago/prettier-plugin-sort-imports": "^6.0.0",
     "@vitejs/plugin-vue": "^6.0.1",
-    "@vue/eslint-config-prettier": "^10.2.0",
     "electron": "^39.2.0",
     "electron-builder": "^26.0.12",
     "electron-vite": "^4.0.1",
     "eslint": "^9.39.1",
+    "eslint-plugin-format": "^1.0.2",
     "eslint-plugin-vue": "^10.5.1",
     "prettier": "^3.6.2",
     "sass": "^1.94.0",

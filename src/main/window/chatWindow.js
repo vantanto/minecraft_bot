@@ -1,27 +1,27 @@
+import { join } from 'node:path'
+import process from 'node:process'
 import { is } from '@electron-toolkit/utils'
-import { join } from 'path'
-
 import { BrowserWindow } from 'electron'
-
 import { getMcBot } from '../ipc/bot'
 import icon from '/resources/icon.png?asset'
 
-let chatWindows = {}
+const chatWindows = {}
 
-export const getChatWindows = () => {
+export function getChatWindows() {
   return chatWindows
 }
 
-export const getBotChatWindow = (username) => {
+export function getBotChatWindow(username) {
   return username ? chatWindows[username] : null
 }
 
-export const createChatWindow = (username) => {
+export function createChatWindow(username) {
   let win = getBotChatWindow(username)
 
   if (win && !win.isDestroyed()) {
     win.show()
-  } else {
+  }
+  else {
     win = new BrowserWindow({
       width: 800,
       height: 500,
@@ -40,9 +40,10 @@ export const createChatWindow = (username) => {
     })
 
     const route = `/chat/${username}`
-    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-      win.loadURL(`${process.env['ELECTRON_RENDERER_URL']}#${route}`)
-    } else {
+    if (is.dev && process.env.ELECTRON_RENDERER_URL) {
+      win.loadURL(`${process.env.ELECTRON_RENDERER_URL}#${route}`)
+    }
+    else {
       win.loadFile(join(__dirname, '../renderer/index.html'), { hash: route })
     }
 
@@ -52,7 +53,7 @@ export const createChatWindow = (username) => {
   return win
 }
 
-export const closeChatWindow = (username) => {
+export function closeChatWindow(username) {
   const win = getBotChatWindow(username)
 
   if (win && !win.isDestroyed()) {

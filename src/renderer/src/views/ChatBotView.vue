@@ -9,7 +9,8 @@ const messages = ref([])
 const scrollAreaRef = ref(null)
 
 function sendMessage() {
-  if (!input.value) return
+  if (!input.value)
+    return
 
   api.bot.sendChatBot(props.username, input.value)
   onReset()

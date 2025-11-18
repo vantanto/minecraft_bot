@@ -1,18 +1,18 @@
 <script setup>
 import { useQuasar } from 'quasar'
 import { ref } from 'vue'
-
 import config from '@/config'
+
+const emit = defineEmits(['update:save'])
 
 const $q = useQuasar()
 
-const emit = defineEmits(['update:save'])
 const model = defineModel()
 
 const form = ref({})
 const loading = ref(false)
 
-const handleSubmitForm = async () => {
+async function handleSubmitForm() {
   loading.value = true
   const response = await api.bot.createBot(form.value.username)
   loading.value = false
@@ -24,7 +24,7 @@ const handleSubmitForm = async () => {
   $q.notify(response.message)
 }
 
-const resetForm = () => {
+function resetForm() {
   form.value = {}
 }
 </script>
@@ -34,13 +34,15 @@ const resetForm = () => {
     <q-card style="min-width: 350px">
       <q-form @submit="handleSubmitForm">
         <q-card-section>
-          <div class="text-h6">Username</div>
+          <div class="text-h6">
+            Username
+          </div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
           <q-input
-            dense
             v-model="form.username"
+            dense
             autofocus
             :rules="[
               (val) => (val && val.length > 0) || 'Please type something',
@@ -50,9 +52,9 @@ const resetForm = () => {
 
         <q-card-actions align="right" class="text-primary">
           <q-btn
+            v-close-popup
             flat
             label="Cancel"
-            v-close-popup
             :disable="loading"
             @click="resetForm"
           />
