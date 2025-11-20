@@ -7,10 +7,11 @@ A Minecraft bot that connects to a server with an intuitive graphical user inter
 - Create a new bot
 - Connect and disconnect the bot
 - Store server and bot usernames
+- Chat functionality (send/receive messages directly in chat window)
 
 ### Planned Features
 
-- Chat functionality
+- Scripting system (run custom scripts/automation for bots)
 
 ## Screenshots
 
@@ -37,7 +38,16 @@ _The username list screen of the Minecraft Bot application._
 
 ![Username Popup](./images/username-popup.png)
 
-_Popup window to enter the bot username._
+_Popup to enter the bot username._
+
+</details>
+
+<details>
+<summary>Chat Window</summary>
+
+![Chat Window](./images/chat-window.png)
+
+_Chat Window to send/receive messages._
 
 </details>
 
