@@ -2,8 +2,8 @@ import { app, ipcMain } from 'electron'
 import handleIpcBot from './bot.js'
 import handleIpcStorage from './storage.js'
 
-const handleIpcMain = () => {
-  ipcMain.on('ping', () => console.log('pong'))
+function handleIpcMain() {
+  // ipcMain.on('ping', () => console.log('pong'))
   ipcMain.handle('app:get-version', () => app.getVersion())
   handleIpcBot()
   handleIpcStorage()

@@ -1,83 +1,124 @@
 import { ipcMain } from 'electron'
-import mineflayer from 'mineflayer'
-import response from './response'
-import { updateServerUsernames } from './storage'
 import MCBot from '@/main/class/MCBot'
 import global from '@/main/global'
+import { closeChatWindow, getValidChatWindow } from '@/main/window/chatWindow'
+import { getMainWindow } from '@/main/window/mainWindow'
+import response from './response'
+import { updateServerUsernames } from './storage'
 
-const getMcBot = (index) => {
-  const mcbot = global.BOTS[index]
-  if (!(mcbot instanceof MCBot))
-    throw new TypeError('Inconsistent types: bot and MCBot must be of the same type.')
+export function getMCBotIndex(username) {
+  return global.BOTS.findIndex(item => item.username === username)
+}
+
+export function getMcBot(username) {
+  const mcbot = global.BOTS.find(item => item.username === username)
+  if (!(mcbot instanceof MCBot)) {
+    throw new TypeError(
+      'Inconsistent types: bot and MCBot must be of the same type.',
+    )
+  }
 
   return mcbot
 }
 
-const handleGetBot = (_event, index) => {
-  const mcbot = getMcBot(index)
+function handleGetBot(_event, username) {
+  const mcbot = getMcBot(username)
   return response.success('Success', mcbot.getData())
 }
 
-const handleGetBots = (_event) => {
-  const mcbotData = global.BOTS.map((mcbot) => mcbot.getData())
+function handleGetBots(_event) {
+  const mcbotData = global.BOTS.map(mcbot => mcbot.getData())
   return response.success('Success', mcbotData)
 }
 
-const handleCreateBot = async (_event, username) => {
+async function handleCreateBot(_event, username) {
   try {
-    if (global.BOTS.findIndex((item) => item.username === username) !== -1)
+    if (global.BOTS.findIndex(item => item.username === username) !== -1)
       throw new Error('Username already exists')
 
-    const webContents = _event.sender
-    const mcbot = new MCBot(webContents, username)
+    const mcbot = new MCBot(username)
     await mcbot.initBot()
     global.BOTS.push(mcbot)
     await updateServerUsernames()
     return response.success('Bot Created')
-  } catch (err) {
+  }
+  catch (err) {
     return response.error(err)
   }
 }
 
-const handleConnectBot = async (_event, index) => {
+async function handleConnectBot(_event, username) {
   try {
-    const mcbot = getMcBot(index)
+    const mcbot = getMcBot(username)
     await mcbot.initBot()
     return response.success('Connected')
-  } catch (err) {
+  }
+  catch (err) {
     return response.error(err)
   }
 }
 
-const handleDisconnectBot = async (_event, index) => {
+async function handleDisconnectBot(_event, username) {
   try {
-    const mcbot = getMcBot(index)
+    const mcbot = getMcBot(username)
     await mcbot.disconnect()
     return response.success('Disconnected')
-  } catch (err) {
+  }
+  catch (err) {
     return response.error(err)
   }
 }
 
-const handleDeleteBot = async (_event, index) => {
+async function handleDeleteBot(_event, username) {
   try {
-    const mcbot = getMcBot(index)
+    const mcbot = getMcBot(username)
     await mcbot.disconnect()
-    global.BOTS.splice(index, 1)
+    await closeChatWindow(username)
+    global.BOTS.splice(getMCBotIndex(username), 1)
     await updateServerUsernames()
     return response.success('Deleted')
-  } catch (err) {
+  }
+  catch (err) {
     return response.error(err)
   }
 }
 
-const handleIpcBot = () => {
+function onOpenChatBot(_event, username) {
+  const mcbot = getMcBot(username)
+  mcbot.openChatWindow(username)
+}
+
+function onSendChatBot(_event, username, message) {
+  const mcbot = getMcBot(username)
+  mcbot.sendChat(message)
+}
+
+function handleIpcBot() {
   ipcMain.handle('bot:get-bot', handleGetBot)
   ipcMain.handle('bot:get-bots', handleGetBots)
   ipcMain.handle('bot:create-bot', handleCreateBot)
   ipcMain.handle('bot:connect-bot', handleConnectBot)
   ipcMain.handle('bot:disconnect-bot', handleDisconnectBot)
   ipcMain.handle('bot:delete-bot', handleDeleteBot)
+  ipcMain.on('bot:open-chat-bot', onOpenChatBot)
+  ipcMain.on('bot:send-chat-bot', onSendChatBot)
+}
+
+export function sendStatusBotUpdated(username, status) {
+  const channel = `bot-${username}:status-bot-updated`
+
+  getMainWindow()?.webContents.send(channel, status)
+  getValidChatWindow(username)?.webContents.send(channel, status)
+}
+
+export function sendMessageBotReceived(username, message) {
+  const chatWindow = getValidChatWindow(username)
+  if (chatWindow) {
+    chatWindow.webContents.send(
+      `bot-${username}:message-bot-received`,
+      message.toString(),
+    )
+  }
 }
 
 export default handleIpcBot

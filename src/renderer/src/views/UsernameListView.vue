@@ -1,18 +1,18 @@
 <script setup>
+import BotCreateDialog from '@components/bot/BotCreateDialog.vue'
+import BotItem from '@components/bot/BotItem.vue'
+import ServerInfo from '@components/ServerInfo.vue'
 import { onMounted, ref } from 'vue'
-import BotCreateDialog from '@renderer/components/bot/BotCreateDialog.vue'
-import BotItem from '@renderer/components/bot/BotItem.vue'
-import ServerInfo from '@renderer/components/ServerInfo.vue'
 
 const bots = ref([])
 const createDialog = ref(false)
 
-const getBots = async () => {
+async function getBots() {
   const response = await api.bot.getBots()
   bots.value = response.data
 }
 
-const handleCreate = () => {
+function handleCreate() {
   createDialog.value = true
 }
 
@@ -25,19 +25,29 @@ onMounted(async () => {
   <q-page class="q-pa-md">
     <ServerInfo class="q-mb-md" />
     <div class="flex justify-center">
-      <q-btn push no-caps label="Add New Bot" color="positive" @click="handleCreate" />
+      <q-btn
+        push
+        no-caps
+        label="Add New Bot"
+        color="positive"
+        @click="handleCreate"
+      />
     </div>
 
-    <q-list class="rounded-borders q-my-md">
-      <bot-item
+    <q-list v-if="bots.length > 0" class="rounded-borders q-my-md">
+      <template
         v-for="(bot, index) in bots"
-        :key="index"
-        :data="bot"
-        :index="index"
-        @update:save="getBots"
-      />
+        :key="bot.username"
+      >
+        <BotItem
+          v-model="bots[index]"
+          :show-open-chat="true"
+          :show-delete="true"
+          @update:save="getBots"
+        />
+      </template>
     </q-list>
 
-    <bot-create-dialog v-model="createDialog" @update:save="getBots" />
+    <BotCreateDialog v-model="createDialog" @update:save="getBots" />
   </q-page>
 </template>

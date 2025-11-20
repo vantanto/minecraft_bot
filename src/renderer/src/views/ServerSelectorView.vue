@@ -1,20 +1,22 @@
 <script setup>
-import { onMounted, ref } from 'vue'
 import router from '@renderer/plugins/router'
+import { onMounted, ref } from 'vue'
 
 const form = ref({})
 const loading = ref(false)
 const servers = ref([])
 const hosts = ref([])
 
-const filterFn = (val, update, abort) => {
+function filterFn(val, update) {
   update(() => {
     const needle = val.toLowerCase()
-    hosts.value = Object.keys(servers.value).filter((v) => v.toLowerCase().indexOf(needle) > -1)
+    hosts.value = Object.keys(servers.value).filter(
+      v => v.toLowerCase().includes(needle),
+    )
   })
 }
 
-const onChangeHost = (val) => {
+function onChangeHost(val) {
   form.value.host = val
   const server = servers.value[val]
   if (server) {
@@ -23,26 +25,23 @@ const onChangeHost = (val) => {
   }
 }
 
-const getServers = async () => {
+async function getServers() {
   const response = await api.storage.getServers()
   servers.value = response.data
 }
 
-const handleSubmitForm = async () => {
+async function handleSubmitForm() {
   loading.value = true
   await api.storage.setServer({
     host: form.value.host,
     port: form.value.port,
-    version: form.value.version
+    version: form.value.version,
   })
   router.push({ name: 'usernames' })
 }
 
-const resetForm = () => {
-  form.value = {
-    port: 25565,
-    version: '1.20.1'
-  }
+function resetForm() {
+  form.value = { port: 25565, version: '1.20.1' }
 }
 
 onMounted(() => {
@@ -66,27 +65,36 @@ onMounted(() => {
               label="Host"
               :model-value="form.host"
               :options="hosts"
-              :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+              :rules="[
+                (val) => (val && val.length > 0) || 'Please type something',
+              ]"
               @input-value="onChangeHost"
               @filter="filterFn"
             >
-              <template v-slot:no-option>
+              <template #no-option>
                 <q-item>
-                  <q-item-section class="text-grey"> No results </q-item-section>
+                  <q-item-section class="text-grey">
+                    No results
+                  </q-item-section>
                 </q-item>
               </template>
             </q-select>
             <q-input
-              dense
               v-model="form.port"
+              dense
               label="Port"
-              :rules="[(val) => (val !== '' && val !== null) || 'Please type something']"
+              :rules="[
+                (val) =>
+                  (val !== '' && val !== null) || 'Please type something',
+              ]"
             />
             <q-input
-              dense
               v-model="form.version"
+              dense
               label="Minecraft Version"
-              :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+              :rules="[
+                (val) => (val && val.length > 0) || 'Please type something',
+              ]"
             />
           </q-card-section>
 

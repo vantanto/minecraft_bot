@@ -1,88 +1,126 @@
 <script setup>
-import { ref, watchEffect } from 'vue'
+import BotStatus from '@components/bot/BotStatus.vue'
 import { useQuasar } from 'quasar'
+import { ref } from 'vue'
 import config from '@/config'
-import BotStatus from '@renderer/components/bot/BotStatus.vue'
+
+defineProps({
+  showConnect: { type: Boolean, default: true },
+  showOpenChat: { type: Boolean, default: false },
+  showDelete: { type: Boolean, default: false },
+})
+
+const emit = defineEmits(['update:save'])
+
+const model = defineModel()
 
 const $q = useQuasar()
 
-const emit = defineEmits(['update:save'])
-const props = defineProps({
-  data: Object,
-  index: Number
-})
-
-const botData = ref({})
 const loading = ref({})
 
-const getBot = async () => {
-  const response = await api.bot.getBot(props.index)
-  botData.value = response.data
-}
+// async function getBot() {
+//   const response = await api.bot.getBot(model.value.username)
+//   model.value = response.data
+// }
 
-const connectBot = async () => {
+async function connectBot() {
   loading.value.connect = true
-  const response = await api.bot.connectBot(props.index)
+  const response = await api.bot.connectBot(model.value.username)
   loading.value.connect = false
-  if (response.status === config.RESPONSE_STATUS.ERROR) $q.notify(response.message)
+  if (response.status === config.RESPONSE_STATUS.ERROR)
+    $q.notify(response.message)
 }
 
-const disconnectBot = async () => {
+async function disconnectBot() {
   loading.value.connect = true
-  await api.bot.disconnectBot(props.index)
+  await api.bot.disconnectBot(model.value.username)
   loading.value.connect = false
 }
 
-const deleteBot = async () => {
+function openChatBot() {
+  api.bot.openChatBot(model.value.username)
+}
+
+async function deleteBot() {
   loading.value.delete = true
-  const response = await api.bot.deleteBot(props.index)
+  const response = await api.bot.deleteBot(model.value.username)
   loading.value.delete = false
   emit('update:save')
   $q.notify(response.message)
 }
 
-api.bot.onStatusBotUpdated((username, status) => {
-  if (botData.value.username == username) {
-    botData.value.status = status
-  }
-})
-
-watchEffect(() => {
-  botData.value = props.data
+api.bot.onStatusBotUpdated(model.value.username, (status) => {
+  model.value.status = status
 })
 </script>
 
 <template>
-  <q-item v-if="botData.username">
+  <q-item v-if="model.username">
     <q-item-section side>
       <q-avatar rounded size="48px">
-        <img :src="config.getMcAvatar(botData.username)" />
+        <img :src="config.getMcAvatar(model.username)">
       </q-avatar>
     </q-item-section>
     <q-item-section>
-      <q-item-label>{{ botData.username }}</q-item-label>
-      <bot-status :status="botData.status" />
+      <q-item-label>{{ model.username }}</q-item-label>
+      <BotStatus :status="model.status" />
     </q-item-section>
     <q-item-section top side>
       <div class="q-gutter-xs">
-        <q-btn
-          v-if="botData.status !== config.BOT_STATUS.CONNECTED"
-          flat
-          icon="play_circle"
-          :loading="loading.connect"
-          @click="connectBot"
-        >
-          <q-tooltip> Connect </q-tooltip>
-        </q-btn>
-        <q-btn v-else flat icon="stop_circle" :loading="loading.connect" @click="disconnectBot">
-          <q-tooltip> Disconnect </q-tooltip>
-        </q-btn>
-        <!-- <q-btn flat icon="message" @click="openChatPopup">
-          <q-tooltip> Chat </q-tooltip>
-        </q-btn> -->
-        <q-btn flat icon="delete" color="negative" :loading="loading.delete" @click="deleteBot">
-          <q-tooltip> Delete </q-tooltip>
-        </q-btn>
+        <template v-if="showConnect">
+          <!-- CONNECT -->
+          <q-btn
+            v-if="model.status !== config.BOT_STATUS.CONNECTED"
+            dense
+            flat
+            color="positive"
+            icon="play_arrow"
+            :loading="loading.connect"
+            @click="connectBot"
+          >
+            <q-tooltip>Connect</q-tooltip>
+          </q-btn>
+
+          <!-- DISCONNECT -->
+          <q-btn
+            v-else
+            dense
+            flat
+            color="negative"
+            icon="stop"
+            :loading="loading.connect"
+            @click="disconnectBot"
+          >
+            <q-tooltip>Disconnect</q-tooltip>
+          </q-btn>
+        </template>
+
+        <template v-if="showOpenChat">
+          <!-- CHAT -->
+          <q-btn
+            dense
+            flat
+            color="primary"
+            icon="chat_bubble"
+            @click="openChatBot"
+          >
+            <q-tooltip>Chat</q-tooltip>
+          </q-btn>
+        </template>
+
+        <template v-if="showDelete">
+          <!-- DELETE -->
+          <q-btn
+            dense
+            flat
+            color="negative"
+            icon="delete"
+            :loading="loading.delete"
+            @click="deleteBot"
+          >
+            <q-tooltip>Delete</q-tooltip>
+          </q-btn>
+        </template>
       </div>
     </q-item-section>
   </q-item>

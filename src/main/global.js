@@ -1,4 +1,4 @@
-let global = {
+const global = {
   SERVER: {},
   BOTS: [],
 }
