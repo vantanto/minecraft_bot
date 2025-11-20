@@ -2,7 +2,7 @@ import mineflayer from 'mineflayer'
 import config from '@/config'
 import global from '@/main/global'
 import { sendMessageBotReceived, sendStatusBotUpdated } from '@/main/ipc/bot'
-import { createChatWindow } from '@/main/window/chatWindow'
+import { createChatWindow, existsChatWindow } from '@/main/window/chatWindow'
 
 class MCBot {
   constructor(username) {
@@ -30,11 +30,12 @@ class MCBot {
   async initEvents() {
     return new Promise((resolve, reject) => {
       this.bot.once('login', () => {
-        // resolve('login')
+        this.setStatus(config.BOT_STATUS.CONNECTED)
+        resolve('login')
       })
 
       this.bot.once('spawn', async () => {
-        this.setStatus(config.BOT_STATUS.CONNECTED)
+        // this.setStatus(config.BOT_STATUS.CONNECTED)
         resolve('spawn')
       })
 
@@ -53,7 +54,7 @@ class MCBot {
   async disconnect() {
     if (this.bot)
       this.bot.quit()
-    this.setStatus(config.BOT_STATUS.DISCONNECTED)
+    // this.setStatus(config.BOT_STATUS.DISCONNECTED)
   }
 
   getData() {
@@ -63,6 +64,9 @@ class MCBot {
   setStatus(status) {
     this.status = status
     sendStatusBotUpdated(this.username, this.status)
+
+    if (existsChatWindow(this.username))
+      this.enableMessageListener()
 
     if (this.status !== config.BOT_STATUS.CONNECTED)
       this.disableMessageListener()
@@ -82,7 +86,7 @@ class MCBot {
   }
 
   enableMessageListener() {
-    if (this.messageListener)
+    if (this.status !== config.BOT_STATUS.CONNECTED || this.messageListener)
       return
     this.bot.on('message', this.messageHandler)
     this.messageListener = true

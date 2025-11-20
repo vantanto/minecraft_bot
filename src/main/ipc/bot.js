@@ -1,10 +1,14 @@
 import { ipcMain } from 'electron'
 import MCBot from '@/main/class/MCBot'
 import global from '@/main/global'
-import { closeChatWindow, getBotChatWindow } from '@/main/window/chatWindow'
+import { closeChatWindow, getValidChatWindow } from '@/main/window/chatWindow'
 import { getMainWindow } from '@/main/window/mainWindow'
 import response from './response'
 import { updateServerUsernames } from './storage'
+
+export function getMCBotIndex(username) {
+  return global.BOTS.findIndex(item => item.username === username)
+}
 
 export function getMcBot(username) {
   const mcbot = global.BOTS.find(item => item.username === username)
@@ -69,8 +73,8 @@ async function handleDeleteBot(_event, username) {
   try {
     const mcbot = getMcBot(username)
     await mcbot.disconnect()
-    closeChatWindow(username)
-    global.BOTS.splice(username, 1)
+    await closeChatWindow(username)
+    global.BOTS.splice(getMCBotIndex(username), 1)
     await updateServerUsernames()
     return response.success('Deleted')
   }
@@ -101,12 +105,14 @@ function handleIpcBot() {
 }
 
 export function sendStatusBotUpdated(username, status) {
-  const mainWindow = getMainWindow()
-  mainWindow.webContents.send(`bot-${username}:status-bot-updated`, status)
+  const channel = `bot-${username}:status-bot-updated`
+
+  getMainWindow()?.webContents.send(channel, status)
+  getValidChatWindow(username)?.webContents.send(channel, status)
 }
 
 export function sendMessageBotReceived(username, message) {
-  const chatWindow = getBotChatWindow(username)
+  const chatWindow = getValidChatWindow(username)
   if (chatWindow) {
     chatWindow.webContents.send(
       `bot-${username}:message-bot-received`,
