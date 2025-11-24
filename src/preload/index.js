@@ -32,6 +32,11 @@ api.storage = {
   getServers: () => ipcRenderer.invoke('storage:get-servers'),
   setServer: data => ipcRenderer.invoke('storage:set-server', data),
 }
+api.store = {
+  getStore: (key, defaultValue) => ipcRenderer.invoke('store:get', key, defaultValue),
+  setStore: (key, value) => ipcRenderer.invoke('store:set', key, value),
+  deleteStore: key => ipcRenderer.invoke('store:delete', key),
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

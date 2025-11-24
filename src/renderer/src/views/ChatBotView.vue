@@ -48,9 +48,7 @@ onMounted(getBot)
 <template>
   <q-page v-if="bot?.username" class="window-height column q-pa-sm">
     <!-- Header -->
-    <q-list bordered class="rounded-borders q-my-sm">
-      <BotItem v-model="bot" />
-    </q-list>
+    <BotItem v-model="bot" bordered class="rounded-borders q-my-sm" />
 
     <!-- Chat Messages -->
     <q-scroll-area ref="scrollAreaRef" class="col-grow q-border q-my-sm">

@@ -1,10 +1,13 @@
 <script setup>
 import BotStatus from '@components/bot/BotStatus.vue'
+import { VIEW_MODE } from '@renderer/constant'
 import { useQuasar } from 'quasar'
 import { ref } from 'vue'
 import config from '@/config'
 
 defineProps({
+  bordered: { type: Boolean, default: false },
+  viewMode: { type: String, default: VIEW_MODE.LIST },
   showConnect: { type: Boolean, default: true },
   showOpenChat: { type: Boolean, default: false },
   showDelete: { type: Boolean, default: false },
@@ -55,18 +58,28 @@ api.bot.onStatusBotUpdated(model.value.username, (status) => {
 </script>
 
 <template>
-  <q-item v-if="model.username">
-    <q-item-section side>
-      <q-avatar rounded size="48px">
-        <img :src="config.getMcAvatar(model.username)">
-      </q-avatar>
-    </q-item-section>
-    <q-item-section>
-      <q-item-label>{{ model.username }}</q-item-label>
-      <BotStatus :status="model.status" />
-    </q-item-section>
-    <q-item-section top side>
-      <div class="q-gutter-xs">
+  <q-item
+    v-if="model.username"
+    style="flex-wrap: wrap;"
+    :class="{
+      row: viewMode === VIEW_MODE.LIST,
+      column: viewMode === VIEW_MODE.GRID,
+      border: bordered,
+    }"
+  >
+    <div class="flex col-grow">
+      <q-item-section v-if="true" side>
+        <q-avatar rounded size="48px">
+          <img :src="config.getMcAvatar(model.username)">
+        </q-avatar>
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>{{ model.username }}</q-item-label>
+        <BotStatus :status="model.status" />
+      </q-item-section>
+    </div>
+    <q-item-section :side="viewMode === VIEW_MODE.LIST" :class="viewMode === VIEW_MODE.LIST ? 'text-right' : 'text-center q-mt-sm'">
+      <div class="q-gutter-xs no-wrap">
         <template v-if="showConnect">
           <!-- CONNECT -->
           <q-btn

@@ -1,0 +1,6 @@
+@use 'quasar/src/css/variables' as q;
+@use 'sass:map';
+
+.border {
+  border: q.$layout-border;
+}
